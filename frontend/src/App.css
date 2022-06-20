@@ -1,0 +1,12 @@
+:root{
+  --nav-gold:#ffe06d,
+  --nav-grey:#b0b0b0,
+}
+.sidebar-active::after{
+  height: 44px;
+  width: 11px;
+  background: linear-gradient(90deg,var(--nav-gold),transparent);
+  content: "";
+  position: absolute;
+  left: 0;
+}
