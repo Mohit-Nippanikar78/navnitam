@@ -37,6 +37,13 @@ export default {
       of: [{ type: "classStudents" }],
     },
     {
+      name: "pendingStudents",
+      title: "Pending Students",
+
+      type: "array",
+      of: [{ type: "classStudents" }],
+    },
+    {
       name: "subject",
       title: "Subject",
       type: "array",

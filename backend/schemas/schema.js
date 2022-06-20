@@ -13,7 +13,7 @@ import ClassStudents from "./classStudents";
 import ExamSubject from "./examSubject";
 import Terms from "./terms";
 import StudentMarks from "./studentMarks";
-import notesChapters from "./notesChapters";
+import NotesChapters from "./notesChapters";
 
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
@@ -28,7 +28,7 @@ export default createSchema({
     ClassStudents,
     Subject,
     Assignment,
-    NotesChapters
+    NotesChapters,
    
     Dates,
     DatesTime,ExamSubject,Terms,StudentMarks,

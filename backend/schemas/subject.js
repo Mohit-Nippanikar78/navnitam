@@ -19,9 +19,10 @@ export default {
       type: "string",
     },
     {
-      name: "subTr",
-      title: "Subject Teacher",
-      type: "string",
+      name: "notes",
+      title: "Notes",
+      type: "array",
+      of: [{ type: "notesChapters" }],
     },
 
     {
