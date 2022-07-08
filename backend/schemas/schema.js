@@ -14,6 +14,10 @@ import ExamSubject from "./examSubject";
 import Terms from "./terms";
 import StudentMarks from "./studentMarks";
 import NotesChapters from "./notesChapters";
+import Faculty from "./faculty";
+import Faculties from "./faculties";
+import College from "./college";
+import NoticeInfo from "./noticeInfo";
 
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
@@ -24,13 +28,20 @@ export default createSchema({
   types: schemaTypes.concat([
     /* Your types here! */
     Admin,
+    College,
     Student,
     ClassStudents,
     Subject,
     Assignment,
     NotesChapters,
-   
+
     Dates,
-    DatesTime,ExamSubject,Terms,StudentMarks,
+    DatesTime,
+    ExamSubject,
+    Terms,
+    StudentMarks,
+    Faculty,
+    Faculties,
+    NoticeInfo
   ]),
 });

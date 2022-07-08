@@ -1,5 +1,5 @@
 import "./App.css";
-import Sidebar from "./elements/Sidebar";
+import {Sidebar} from "./components";
 import Home from "./container/Home";
 import { useState, useEffect, useContext, createContext } from "react";
 function App() {
@@ -10,9 +10,7 @@ function App() {
       setScreenWidth(window.innerWidth > 768);
     };
     window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
   }, []);
-  const sWidth = createContext(screenWidth);
 
   useEffect(() => {
     console.log(screenWidth);
@@ -20,12 +18,10 @@ function App() {
 
   return (
     <>
-      <sWidth.Provider value={screenWidth}>
-        <div className="flex-col-reverse flex md:flex-row">
-          <Sidebar sidebarWidth={sidebarWidth} screenWidth={screenWidth} />
-          <Home sidebarWidth={sidebarWidth} screenWidth={screenWidth} />
-        </div>
-      </sWidth.Provider>
+      <div className="flex-col-reverse flex  relative">
+        <Sidebar sidebarWidth={sidebarWidth} screenWidth={screenWidth} />
+        <Home sidebarWidth={sidebarWidth} screenWidth={screenWidth} />
+      </div>
     </>
   );
 }

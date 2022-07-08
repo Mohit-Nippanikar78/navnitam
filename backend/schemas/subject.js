@@ -14,10 +14,12 @@ export default {
       type: "string",
     },
     {
-      name: "subTr",
-      title: "Subject Teacher",
-      type: "string",
+      name: "faculties",
+      title: "Faculties",
+      type: "array",
+      of: [{ type: "faculties" }],
     },
+
     {
       name: "notes",
       title: "Notes",

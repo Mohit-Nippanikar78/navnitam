@@ -2,11 +2,42 @@
   --nav-gold:#ffe06d,
   --nav-grey:#b0b0b0,
 }
-.sidebar-active::after{
+@font-face {
+  font-family: Aquire;
+  src: url(./assets/fonts/AquireBold-8Ma60.otf);
+}
+.aquire{
+  font-family: Aquire;
+}
+.sidebar-active::after{ 
   height: 44px;
   width: 11px;
   background: linear-gradient(90deg,var(--nav-gold),transparent);
   content: "";
   position: absolute;
   left: 0;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.sidebarOptionsScrollbar{
+  overflow-x: scroll;
+}
+.sidebarOptionsScrollbar::-webkit-scrollbar{
+background:pink;
+margin-top: 2rem;
+height: 3px;
+border-radius: 10px;
+width: 100px;
+
+
+
+}
+.sidebarOptionsScrollbar::-webkit-scrollbar-thumb{
+  border-radius: 10px;
+  background: #202020;
+
 }

@@ -56,5 +56,11 @@ export default {
       of: [{ type: "dates" }],
     },
     { name: "marks", title: "Marks", type: "array", of: [{ type: "terms" }] },
+    {
+      name: "classNotices",
+      title: "Class Notices",
+      type: "array",
+      of: [{ type: "noticeInfo" }],
+    },
   ],
 };
