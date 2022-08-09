@@ -4,10 +4,11 @@ const {
   addStudent,
   updateStudent,
   getStudent,
-  allStudents
+  allStudents,
+  getSubjectsLecAtt,
 } = require("../controllers/StudentsC.js");
 route.post("/add", addStudent);
 route.put("/edit/:id", updateStudent);
 route.get("/:id", getStudent);
-route.get("/",allStudents)
+route.get("/class/:classId", allStudents);
 module.exports = route;

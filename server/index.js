@@ -2,9 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
-
+const bodyParser = require("body-parser")
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 mongoose
   .connect(
     "mongodb+srv://MohitNippanikar:mhtnipp77@cluster0.mwqucgz.mongodb.net/Class?retryWrites=true&w=majority",
@@ -20,6 +21,11 @@ mongoose
   });
 app.use("/students", require("./routes/StudentsR"));
 app.use("/admin", require("./routes/AdminR"));
-app.get("/",(req,res)=>{
-  res.send("lfffhfhf lesss go da");
-})
+app.use("/subjects", require("./routes/SubjectR"));
+app.use("/attendance", require("./routes/AttendanceR"));
+app.use("/notify", require("./routes/NotifyR"));
+app.get("/", (req, res) => {
+  res.send("v6 deployed ehahahahahahah");
+});
+
+

@@ -11,10 +11,22 @@ const StudentSchema = new mongoose.Schema({
     ref: "Admin",
     default: null,
   },
-  administrator:{
-    type:Boolean,
-    default:false
-  }
+  administrator: {
+    type: Boolean,
+    default: false,
+  },
+  lecAtt: [
+    {
+      subjectId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Subject",
+      },
+      attCount: {
+        type: Number,
+        default: 0,
+      },
+    },
+  ],
 });
 const Student = mongoose.model("Students", StudentSchema);
 

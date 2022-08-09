@@ -1,0 +1,10 @@
+export { default as Navbar } from "./Navbar";
+export { default as Activity } from "./Activity";
+export { default as Sidebar } from "./Sidebar";
+export { default as Assistant } from "./Assistant";
+export { default as Students } from "./Students";
+export { default as Attendance } from "./Attendance";
+export { default as Subjects } from "./Subjects";
+export { default as AttendanceSubject } from "./AttendanceSubject";
+export { default as Requests } from "./Requests";
+export { default as Presenty } from "./Presenty";

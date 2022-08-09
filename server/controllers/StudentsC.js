@@ -1,9 +1,9 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose, mongo } = require("mongoose");
 const Student = require("../models/Student");
 const allStudents = async (req, res) => {
-  let { classId } = req.body;
+  let { classId } = req.params;
   try {
-    let students = await Student.find({ class: classId });
+    let students = await Student.find({ class: classId }).sort({ rollNo: 1 });
     res.send(students);
   } catch (error) {
     console.log(error);
@@ -43,10 +43,40 @@ const updateStudent = async (req, res) => {
 const getStudent = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await Student.findById(id);
-    res.send(user);
+    if (req.query?.lecAtt) {
+      const user = await Student.findById(id).populate("lecAtt").exec();
+      let lecAttSub = user.lecAtt.find((item) => {
+        return item.subjectId.toString() === req.query.lecAtt;
+      });
+      res.send({ attCount: lecAttSub.attCount });
+    } else if (req.query?.lecAttCount) {
+      const user = await Student.findById(id).populate("lecAtt").exec();
+      let lecAttCount = 0;
+      user.lecAtt.map((item) => {
+        lecAttCount += item.attCount;
+        return;
+      });
+      res.send({ lecAttCount });
+    } else {
+      const { id } = req.params;
+      const user = await Student.findById(id);
+      res.send(user);
+    }
   } catch (error) {
     console.log(error);
   }
 };
-module.exports = { addStudent, getStudent, updateStudent ,allStudents};
+const getSubjectsLecAtt = async (req, res) => {
+  try {
+    // let sub = await Student
+  } catch (error) {
+    console.log(error);
+  }
+};
+module.exports = {
+  addStudent,
+  getStudent,
+  updateStudent,
+  allStudents,
+  getSubjectsLecAtt,
+};

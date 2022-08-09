@@ -1,7 +1,0 @@
-export { default as Navbar} from "./Navbar"
-export { default as Activity} from "./Activity"
-export { default as Sidebar} from "./Sidebar"
-export { default as Assistant} from "./Assistant"
-export { default as Team} from "./Team"
-export { default as Attendance} from "./Attendance"
-export { default as Subjects} from "./Subjects"

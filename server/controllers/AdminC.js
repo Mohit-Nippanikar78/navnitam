@@ -13,7 +13,7 @@ const addAdmin = async (req, res) => {
 const getAdmins = async (req, res) => {
   try {
     let mo = await Admin.find().populate("crName");
-    
+
     res.send(mo);
   } catch (error) {
     console.log(error);
@@ -81,30 +81,48 @@ const updateAdminStudents = async (req, res) => {
     _id: req.body.classid,
     students: { $in: [req.body.studentId] },
   });
-  console.log(Already);
   if (Already.length == 0) {
-    console.log("doing")
+    console.log("doing");
     try {
-      Admin.findByIdAndUpdate(req.body.classId, {
-        $push: { students: req.body.studentId },
-      },
-      function (error, success) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log(success);
-            }
-        });
+      Admin.findByIdAndUpdate(
+        req.body.classId,
+        {
+          $push: { students: req.body.studentId },
+        },
+        function (error, success) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log(success);
+          }
+        }
+      );
     } catch (error) {
       console.log(error);
     }
   }
   res.send("done");
 };
+const getAdmin = async (req, res) => {
+  let { adminId } = req.params;
+
+  try {
+    if (req.query?.students) {
+      let adminn = await Admin.findById(adminId).populate("students").exec()
+      res.send(adminn.students);
+    } else {
+      let adminn = await Admin.findById(adminId);
+      res.send(adminn);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   getAllAdminPendingStudents,
   addAdmin,
   getAdmins,
+  getAdmin,
   updateAdminPendingStudents,
   removeAdminPendingStudents,
   updateAdminStudents,
