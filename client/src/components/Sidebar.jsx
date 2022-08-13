@@ -3,7 +3,7 @@ import { AiOutlineMore } from "react-icons/ai";
 
 import { motion, AnimatePresence } from "framer-motion";
 import OutsideClickHandler from "react-outside-click-handler";
-import { fetchUser, sidebarMenu ,serverUrl} from "../utils";
+import { fetchUser, sidebarMenu, serverUrl } from "../utils";
 import { Link, useNavigate } from "react-router-dom";
 const Sidebar = ({ sidebarWidth }) => {
   const [admin, setAdmin] = useState(false);
@@ -235,7 +235,10 @@ const SidebarOptions = ({
                     style={{
                       color: "#b0b0b0",
                     }}
-                    onClick={() => navigate(item.to)}
+                    onClick={() => {
+                      navigate(item.to);
+                      setSidebarOptionsToggle(!sidebarOptionsToggle);
+                    }}
                   >
                     <div className="m-auto w-max">{item.activeIcon}</div>
                     <div className="text-xs  ">{item.name}</div>
@@ -250,7 +253,10 @@ const SidebarOptions = ({
                       style={{
                         color: "#b0b0b0",
                       }}
-                      onClick={() => navigate(item.to)}
+                      onClick={() => {
+                        navigate(item.to);
+                        setSidebarOptionsToggle(!sidebarOptionsToggle);
+                      }}
                     >
                       <div className="m-auto w-max">{item.activeIcon}</div>
                       <div className="text-xs  ">{item.name}</div>

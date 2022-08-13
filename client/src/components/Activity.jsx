@@ -5,37 +5,51 @@ import { userInfo, serverUrl } from ".././utils";
 import { FaBookDead } from "react-icons/fa";
 import moment from "moment";
 import Spinner from "./Spinner";
-const Activity = () => {
+const Activity = ({ studentId }) => {
   const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(true);
-  // return (
-  //   <div
-  //     className=" flex items-center justify-center "
-  //     style={{ height: "80vh" }}
-  //   >
-  //     <div className="">
-  //       <img src={Image1} className="w-2/3 mx-auto" alt="Notifications !!" />
-  //       <div className="text-base mt-6 text-lg font-bold text-center ">
-  //         You'll find notifications here
-  //       </div>
-  //       <div className="text-slate-400 text-xs  text-center w-2/3 mx-auto ">
-  //         Stay on top for relevant activity for chats , reminders,calender etc
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
+  const [admin, setAdmin] = useState(false);
   useEffect(() => {
-    userInfo().then((user) => {
-      Axios.get(serverUrl + `/notify/student/${user._id}`)
+    if (studentId == undefined) {
+      userInfo().then((user) => {
+        Axios.get(serverUrl + `/notify/student/${user._id}`)
+          .then((res) => {
+            setModels(res.data);
+          })
+          .then(() => {
+            setLoading(false);
+          });
+      });
+    } else {
+      setAdmin(true);
+      Axios.get(serverUrl + `/notify/student/${studentId}`)
         .then((res) => {
           setModels(res.data);
         })
         .then(() => {
           setLoading(false);
         });
-    });
+    }
   }, []);
   if (loading) return <Spinner message="Getting Notifications..." />;
+  if (models.length == 0) {
+    return (
+      <div
+        className=" flex items-center justify-center "
+        style={{ height: "80vh" }}
+      >
+        <div className="">
+          <img src={Image1} className="w-2/3 mx-auto" alt="Notifications !!" />
+          <div className="text-base mt-6 text-lg font-bold text-center ">
+            You'll find notifications here
+          </div>
+          <div className="text-slate-400 text-xs  text-center w-2/3 mx-auto ">
+            Stay on top for relevant activity for chats , reminders,calender etc
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="w-full  h-full ">
       <div className=" bg-gray-50 p-8  right-0">
@@ -49,7 +63,15 @@ const Activity = () => {
           YESTERDAY
         </h2> */}
         {models.map((Noti, i) => {
-          return <NotifyBox Noti={Noti} key={i} />;
+          return (
+            <NotifyBox
+              Noti={Noti}
+              models={models}
+              setModels={setModels}
+              key={i}
+              admin={admin}
+            />
+          );
         })}
 
         <div className="flex items-center justiyf-between">
@@ -63,7 +85,7 @@ const Activity = () => {
     </div>
   );
 };
-const NotifyBox = ({ Noti }) => {
+const NotifyBox = ({ Noti, models, setModels, admin }) => {
   if (Noti.type == "absenty") {
     return (
       <div className="w-full p-3 mt-4 bg-red-100 rounded flex items-center">
@@ -83,22 +105,55 @@ const NotifyBox = ({ Noti }) => {
         </div>
         <div className="pl-3 w-full flex flex-col  justify-between">
           <p className="text-sm leading-none text-red-700">
-            You were marked Absent for
+            {admin ? "Student was " : "You were "} marked Absent for
             <span className="text-indigo-700">
               {" " + Noti.subjectId.subjectName + " "}
             </span>
             lecture conducted on
-            <span className="text-indigo-700">
-              {" " + moment(Noti.absentDate).format("MMM Do YY") + " "}
-            </span>
+            <span className="text-indigo-700">{Noti.absentDate}</span>
             at
             <span className="text-indigo-700">{" " + Noti.timing}</span>
           </p>
           <p className="text-xs leading-3 pt-1 text-gray-500">
-            
             {moment(Noti.createdAt).fromNow()}
           </p>
         </div>
+        {!admin && (
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              setModels(
+                models.filter((item) => {
+                  return item._id !== Noti._id;
+                })
+              );
+              Axios.delete(serverUrl + `/notify/remove/${Noti._id}`);
+            }}
+          >
+            <svg
+              width={14}
+              height={14}
+              viewBox="0 0 14 14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.5 3.5L3.5 10.5"
+                stroke="#4B5563"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M3.5 3.5L10.5 10.5"
+                stroke="#4B5563"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        )}
       </div>
     );
   } else if (Noti.type == "fresher") {

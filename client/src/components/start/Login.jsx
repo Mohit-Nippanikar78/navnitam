@@ -25,7 +25,7 @@ const Login = () => {
     };
 
     Axios.post(serverUrl + `/students/add`, doc).then(async (res) => {
-      await localStorage.setItem("userInfo", JSON.stringify(res.data));
+      localStorage.setItem("userInfo", JSON.stringify(res.data));
       if (res.data.class == null || res.data.rollNo == null) {
         navigate("/start", { replace: true });
       } else {
@@ -37,7 +37,7 @@ const Login = () => {
     <div>
       <section className={Login ? "cover cover-active" : "cover"}>
         <div
-          className={Login ? "container con-active" : "container"}
+          className={Login ? "containerl con-active" : "containerl"}
           style={{ height: screenWidth ? "500px" : "300px" }}
         >
           <div className="user signup">

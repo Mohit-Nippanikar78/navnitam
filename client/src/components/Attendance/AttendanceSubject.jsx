@@ -1,38 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { FaChalkboardTeacher } from "react-icons/fa";
-import { useParams } from "react-router-dom";
-import { userInfo, serverUrl } from "../utils";
-import Spinner from "./Spinner";
+import { useLocation, useParams } from "react-router-dom";
+import { userInfo, serverUrl } from "../../utils";
+import Spinner from "../Spinner";
 import Axios from "axios";
 import { TiTick } from "react-icons/ti";
 import { ImCross } from "react-icons/im";
-const AttendanceSubject = () => {
-  let { subject } = useParams();
+const AttendanceSubject = ({ studentId, subjectId }) => {
+  const location = useLocation();
+
   const [loading, setLoading] = useState(true);
   const [subInfo, setSubInfo] = useState([]);
   const [Tinfo, setTinfo] = useState([]);
   const [attCount, setAttCount] = useState(1);
   useEffect(() => {
-    userInfo()
-      .then((user) => {
-        Axios.get(serverUrl + `/subjects/info/${subject}`).then((res) =>
-          setSubInfo(res.data)
-        );
-        Axios.get(
-          serverUrl +
-            `/attendance/totalSubjectLectures?studentId=${user._id}&subjectId=${subject}`
-        ).then((res) => {
-          setTinfo(res.data);
-        });
-        Axios.get(serverUrl + `/students/${user._id}?lecAtt=${subject}`).then(
-          (res) => {
-            setAttCount(res.data.attCount);
-          }
-        );
-      })
-      .then(() => {
-        setLoading(false);
-      });
+    Axios.get(
+      serverUrl + `/subjects/info/${location?.state?.subjectId || subjectId}`
+    ).then((res) => setSubInfo(res.data));
+    Axios.get(
+      serverUrl +
+        `/attendance/totalSubjectLectures?studentId=${
+          location?.state?.studentId || studentId
+        }&subjectId=${location?.state?.subjectId || subjectId}`
+    ).then((res) => {
+      setTinfo(res.data);
+    });
+    Axios.get(
+      serverUrl +
+        `/students/${location.state?.studentId || studentId}?lecAtt=${
+          location?.state?.subjectId || subjectId
+        }`
+    ).then((res) => {
+      setAttCount(res.data.attCount);
+      setLoading(false);
+    });
   }, []);
   if (loading) return <Spinner message="Getting Attendance..." />;
   return (

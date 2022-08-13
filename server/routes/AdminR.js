@@ -6,6 +6,7 @@ const {
   removeAdminPendingStudents,
   getAllAdminPendingStudents,
   updateAdminStudents,
+  removeAdminStudents,
   getAdmin,
 } = require("../controllers/AdminC");
 const route = express.Router();
@@ -15,6 +16,7 @@ route.get("/all", getAdmins);
 route.get("/info/:adminId",getAdmin)
 
 route.put("/students/add", updateAdminStudents);
+route.put("/students/remove", removeAdminStudents);
 route.put("/pendingStudents/add", updateAdminPendingStudents);
 route.put("/pendingStudents/remove", removeAdminPendingStudents);
 route.get("/pendingStudents/:id", getAllAdminPendingStudents);

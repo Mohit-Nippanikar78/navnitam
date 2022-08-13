@@ -14,13 +14,13 @@ const addAttendance = async (req, res) => {
     Student.findByIdAndUpdate(
       studentId,
       {
-        $push: { lecAtt: { subjectId, attCount: sub.lecCon } },
+        $push: { lecAtt: { subjectId, attCount: sub.lecCon - 1 } },
       },
       function (error, success) {
         if (error) {
           console.log(error);
         } else {
-          console.log(success);
+          console.log("success");
         }
       }
     );
@@ -43,7 +43,6 @@ const addAttendance = async (req, res) => {
           { $inc: { "lecAtt.$.attCount": 1 } }
         );
       } else {
-        console.log("this si done");
         await Notify.insertMany({
           type: "absenty",
           absentDate: date,
@@ -65,17 +64,26 @@ const addAttendance = async (req, res) => {
 const updateAttendance = async (req, res) => {
   let { id, present, studentId } = req.body;
   try {
-    let attend = await Attendance.findByIdAndUpdate(id, { present });
+    await Attendance.findByIdAndUpdate(id, { present });
     let attend1 = await Attendance.findById(id);
+    let { subjectId, date, studentId, startTime, endTime } = attend1;
 
     if (present) {
+      await Notify.findOneAndDelete({
+        type: "absenty",
+        absentDate: date,
+        subjectId,
+        studentId,
+        timing: startTime + "-" + endTime,
+      });
+
       await Student.updateOne(
-        { _id: studentId, "lecAtt.subjectId": attend1.subjectId },
+        { _id: studentId, "lecAtt.subjectId": subjectId },
         { $inc: { "lecAtt.$.attCount": 1 } }
       );
     } else {
       await Student.updateOne(
-        { _id: studentId, "lecAtt.subjectId": attend1.subjectId },
+        { _id: studentId, "lecAtt.subjectId": subjectId },
         { $inc: { "lecAtt.$.attCount": -1 } }
       );
     }

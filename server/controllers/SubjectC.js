@@ -15,7 +15,7 @@ const addSubject = async (req, res) => {
           if (error) {
             console.log(error);
           } else {
-            console.log(success);
+            console.log("success");
           }
         }
       );
@@ -40,7 +40,7 @@ const getSubjects = async (req, res) => {
     let { classId } = req.params;
     if (req.query.count) {
       const subCount = await Subject.find({ admin: classId }).count();
-      res.send({ subCount });
+   res.send({ subCount });
     } else {
       const subjects = await Subject.find({ admin: classId });
       res.send(subjects);

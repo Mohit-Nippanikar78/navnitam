@@ -7,10 +7,10 @@ const {
   updateSubject,
 } = require("../controllers/SubjectC");
 const route = express.Router();
+route.get("/info/:id", infoSubject);
+route.get("/:classId", getSubjects);
 route.post("/add", addSubject);
 route.put("/update/lecCon", updateSubjectLecCon);
-route.get("/:classId", getSubjects);
-route.get("/info/:id", infoSubject);
 route.put("/update", updateSubject);
 
 module.exports = route;

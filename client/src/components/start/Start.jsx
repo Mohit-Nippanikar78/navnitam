@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Axios from "axios";
-import { userInfo, serverUrl } from "../../utils";
+import { userInfo, serverUrl, fetchUser } from "../../utils";
 const Start = () => {
   const [roll, setRoll] = useState("");
   const navigate = useNavigate();
@@ -19,6 +19,12 @@ const Start = () => {
       );
     });
   };
+  useEffect(() => {
+    fetchUser().then((user) => {
+      user.class !== null && navigate("/");
+    });
+  }, []);
+
   return (
     <div style={styles} className="h-screen">
       <div className="w-full flex items-center justify-center">

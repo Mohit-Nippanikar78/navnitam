@@ -19,8 +19,8 @@ import {
   RiBookMarkFill,
 } from "react-icons/ri";
 import { FaListUl, FaListAlt } from "react-icons/fa";
-// export const serverUrl = "https://navnitamfirst.herokuapp.com";
-export const serverUrl = "http://localhost:3001";
+ export const serverUrl = "https://navnitamfirst.herokuapp.com";
+//export const serverUrl = "http://localhost:3001";
 export const sidebarMenu = [
   {
     unactiveIcon: <AiOutlineBell size={24} />,
@@ -34,7 +34,7 @@ export const sidebarMenu = [
     unactiveIcon: <FaListUl size={24} />,
     activeIcon: <FaListAlt size={24} />,
     name: "Attendance",
-    to: "/attendance",
+    to: "/attendance/subjects",
     public: true,
   },
   {
@@ -49,7 +49,7 @@ export const sidebarMenu = [
     activeIcon: <RiBookMarkFill size={24} />,
     name: "Subjects",
     to: "/subjects",
-    public: true,
+    public: false,
   },
   {
     unactiveIcon: <RiTeamLine size={24} />,
@@ -115,7 +115,7 @@ export const sidebarMenu = [
 //   attendance[]{ "actorCount": count(time[subject == "maths"])}
 // }
 export const userInfo = async () => {
-  let obj =  localStorage.getItem("userInfo");
+  let obj = localStorage.getItem("userInfo");
   let userInfo = JSON.parse(obj);
   return userInfo;
 };

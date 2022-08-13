@@ -4,6 +4,7 @@ import { RiAdminFill } from "react-icons/ri";
 import Axios from "axios";
 import moment from "moment";
 import { getAdmins, userInfo, serverUrl } from "../../utils";
+import Modals from "../Elements/Modals";
 
 const JoinClass = () => {
   const [admins, setAdmins] = useState([]);
@@ -13,6 +14,11 @@ const JoinClass = () => {
       setAdmins(res.data);
     });
   }, []);
+  useEffect(() => {
+    console.log("mjffhfhfh" + modal);
+
+    return () => {};
+  }, [modal]);
 
   return (
     <div>
@@ -27,45 +33,12 @@ const JoinClass = () => {
       </div>
 
       {modal && (
-        <div
-          onClick={() => {
-            setModal(false);
-          }}
-          class="bg-slate-500 bg-opacity-50 modal fade fixed flex items-center justify-center top-0 left-0  w-full h-full outline-none overflow-x-hidden overflow-y-auto"
-        >
-          <div class="modal-dialog relative pointer-events-none w-4/5 md:w-1/3">
-            <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
-              <div class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
-                <h5
-                  class="text-xl font-medium leading-normal text-gray-800"
-                  id="exampleModalLabel"
-                >
-                  Note
-                </h5>
-                <button
-                  type="button"
-                  class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
-                  data-bs-dismiss="modal"
-                  ariaLabel="Close"
-                ></button>
-              </div>
-              <div class="modal-body relative p-4">
-                Contact your CR for your admission in that class.
-              </div>
-              <div class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
-                <button
-                  type="button"
-                  class="px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
-                  onClick={() => {
-                    setModal(false);
-                  }}
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Modals
+          setModal={setModal}
+          confirmBox={false}
+          title="Note"
+          content="Contact your CR for your admission in that class."
+        />
       )}
     </div>
   );
@@ -86,11 +59,10 @@ const Class = ({ info, setModal }) => {
     console.log(applied, clicked);
     if (clicked) {
       if (applied) {
+        setModal(true);
         Axios.put(serverUrl + `/admin/pendingStudents/add`, {
           classId: info._id,
           studentId: obj._id,
-        }).then(() => {
-          setModal(true);
         });
       } else if (applied == undefined) {
         console.log("nothin");
@@ -118,7 +90,7 @@ const Class = ({ info, setModal }) => {
 
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <svg
-                class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                class="flex-shrink-0 mx-2 h-5 w-5 text-gray-400"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"

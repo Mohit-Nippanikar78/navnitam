@@ -3,8 +3,10 @@ const Notify = require("../models/Notify");
 const getNotify = async (req, res) => {
   let { studentId } = req.params;
   try {
-
-    let notifys = await Notify.find({ studentId }).populate("subjectId").sort({createdAt: -1}).exec()
+    let notifys = await Notify.find({ studentId })
+      .populate("subjectId")
+      .sort({ createdAt: -1 })
+      .exec();
 
     res.send(notifys);
   } catch (error) {
@@ -20,4 +22,12 @@ const addNotify = async (req, res) => {
     console.log(error);
   }
 };
-module.exports = { getNotify, addNotify };
+const removeNotify = async (req, res) => {
+  try {
+    await Notify.findByIdAndDelete(req.params.notifyId);
+    res.send("deleted");
+  } catch (error) {
+    console.log(error);
+  }
+};
+module.exports = { getNotify, addNotify,removeNotify };

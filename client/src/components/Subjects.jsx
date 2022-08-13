@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BsFillPlusSquareFill, BsThreeDotsVertical } from "react-icons/bs";
 import TeamLogo from "../assets/images/teamsLogo.jpg";
 import OutsideClickHandler from "react-outside-click-handler";
-import { fetchUser, userInfo,serverUrl } from "../utils";
+import { fetchUser, userInfo, serverUrl } from "../utils";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Spinner from "./Spinner";
@@ -159,7 +159,7 @@ const NewSubject = ({ setNewSubject, setEditSubject, editSubject }) => {
                   setProblem(true);
                 } else {
                   if (edit) {
-                    Axios.put("serverUrl + `/subjects/update", {
+                    Axios.put(serverUrl + `/subjects/update`, {
                       _id: editSubject?.subId,
                       faculty: subTr,
                       subjectCode: subCode,
@@ -175,7 +175,7 @@ const NewSubject = ({ setNewSubject, setEditSubject, editSubject }) => {
                         subjectCode: subCode,
                         subjectName: subName,
                       });
-                      Axios.post("serverUrl + `/subjects/add", {
+                      Axios.post(serverUrl + `/subjects/add`, {
                         admin: user.class,
                         faculty: subTr,
                         subjectCode: subCode,

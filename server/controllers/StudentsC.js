@@ -33,7 +33,7 @@ const updateStudent = async (req, res) => {
       return res.status(404).send(`No post with id: ${id}`);
 
     const updatedStudent = req.body;
-    await Student.findByIdAndUpdate(id, updatedStudent, { new: true });
+    await Student.findByIdAndUpdate(id, updatedStudent);
 
     res.send(updatedStudent);
   } catch (error) {
@@ -48,7 +48,10 @@ const getStudent = async (req, res) => {
       let lecAttSub = user.lecAtt.find((item) => {
         return item.subjectId.toString() === req.query.lecAtt;
       });
-      res.send({ attCount: lecAttSub.attCount });
+
+      res.send({
+        attCount: lecAttSub?.attCount,
+      });
     } else if (req.query?.lecAttCount) {
       const user = await Student.findById(id).populate("lecAtt").exec();
       let lecAttCount = 0;
@@ -57,6 +60,17 @@ const getStudent = async (req, res) => {
         return;
       });
       res.send({ lecAttCount });
+    } else if (req.query?.className) {
+      const user = await Student.findById(id).populate("class").exec();
+      let { _id, name, email, administrator, rollNo } = user;
+      res.send({
+        _id,
+        name,
+        email,
+        administrator,
+        rollNo,
+        className: user.class.name,
+      });
     } else {
       const { id } = req.params;
       const user = await Student.findById(id);

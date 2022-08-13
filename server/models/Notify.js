@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const NotifySchema = mongoose.Schema({
   type: String,
-  absentDate: Date,
+  absentDate: String,
   subjectId: { type: mongoose.Schema.Types.ObjectId, ref: "Subject" },
   studentId: { type: mongoose.Schema.Types.ObjectId, ref: "Student" },
   timing: String,

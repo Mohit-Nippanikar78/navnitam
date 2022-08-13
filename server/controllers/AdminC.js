@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const Admin = require("../models/Admin");
+const Student = require("../models/Student");
 
 const addAdmin = async (req, res) => {
   const admin = await new Admin(req.body);
@@ -45,7 +46,7 @@ const updateAdminPendingStudents = async (req, res) => {
           if (error) {
             console.log(error);
           } else {
-            console.log(success);
+            console.log("success");
           }
         }
       );
@@ -67,7 +68,7 @@ const removeAdminPendingStudents = async (req, res) => {
         if (error) {
           console.log(error);
         } else {
-          console.log(success);
+          console.log("success");
         }
       }
     );
@@ -82,7 +83,7 @@ const updateAdminStudents = async (req, res) => {
     students: { $in: [req.body.studentId] },
   });
   if (Already.length == 0) {
-    console.log("doing");
+  
     try {
       Admin.findByIdAndUpdate(
         req.body.classId,
@@ -108,12 +109,22 @@ const getAdmin = async (req, res) => {
 
   try {
     if (req.query?.students) {
-      let adminn = await Admin.findById(adminId).populate("students").exec()
+      let adminn = await Admin.findById(adminId).populate("students").exec();
       res.send(adminn.students);
     } else {
       let adminn = await Admin.findById(adminId);
       res.send(adminn);
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+const removeAdminStudents = async (req, res) => {
+  let { classId, studentId } = req.body;
+  try {
+    await Admin.findByIdAndUpdate(classId, { $pull: { students: studentId } });
+    await Student.findByIdAndUpdate(studentId, { class: null });
+    res.send("adjddhdh");
   } catch (error) {
     console.log(error);
   }
@@ -126,4 +137,5 @@ module.exports = {
   updateAdminPendingStudents,
   removeAdminPendingStudents,
   updateAdminStudents,
+  removeAdminStudents,
 };

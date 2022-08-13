@@ -14,7 +14,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
   let navigate = useNavigate();
 
   return (
-    <div className="flex flex-col fixed w-full bg-white ">
+    <div className="flex flex-col fixed w-full bg-white z-30">
       <div className=" w-full capitalize flex items-center m-auto  ">
         <img
           className="w-10 h-10 rounded-full m-2 mb-0"

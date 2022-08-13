@@ -28,7 +28,7 @@
     );
   }
   
-  .container {
+  .containerl {
     position: relative;
     overflow: hidden;
     width: 800px;
@@ -37,10 +37,10 @@
       rgba(240, 46, 170, 0.05) 25px 25px;
   }
   
-  .container img {
+  .containerl img {
     width: 100%;
   }
-  .container .user {
+  .containerl .user {
     position: absolute;
     top: 0;
     left: 0;
@@ -48,14 +48,14 @@
     height: 100%;
     display: flex;
   }
-  .container .imgBx {
+  .containerl .imgBx {
     position: relative;
     width: 50%;
     height: 100%;
     transition: 1s;
   }
   
-  .container img {
+  .containerl img {
     position: absolute;
     top: 0;
     left: 0;
@@ -63,7 +63,7 @@
     height: 100%;
     object-fit: cover;
   }
-  .container .formBx {
+  .containerl .formBx {
     background-color: white;
     position: relative;
     width: 50%;
@@ -74,7 +74,7 @@
     padding: 0px 40px;
     transition: 1s;
   }
-  .container .formBx h2 {
+  .containerl .formBx h2 {
     font-size: 18px;
     font-weight: 600;
     text-transform: uppercase;
@@ -84,7 +84,7 @@
     color: #555;
     margin-bottom: 10px;
   }
-  .container .formBx input {
+  .containerl .formBx input {
     position: relative;
     width: 100%;
     padding: 10px;
@@ -97,7 +97,7 @@
     font-size: 14px;
     letter-spacing: 1px;
   }
-  .container .formBx input[type="submit"] {
+  .containerl .formBx input[type="submit"] {
     max-width: 100px;
     background-color: #44318D;
     color: white;
@@ -106,7 +106,7 @@
     letter-spacing: 1px;
     transition: 0.5s;
   }
-  .container .formBx p {
+  .containerl .formBx p {
     margin-top: 20px;
     font-size: 12px;
     letter-spacing: 1px;
@@ -114,52 +114,52 @@
     text-transform: uppercase;
     font-weight: 500;
   }
-  .container .formBx p div {
+  .containerl .formBx p div {
     text-decoration: none;
     color: #66e;
   }
   
   /* Movement css */
   @media only screen and (max-width: 768px) {
-    .container {
+    .containerl {
       box-shadow: none;
     }
-    .container.con-active{
+    .containerl.con-active{
       
       box-shadow: none !important;
     }
   }
-  .container.con-active {
+  .containerl.con-active {
     box-shadow: rgba(240, 46, 170, 0.4) -5px 5px,
       rgba(240, 46, 170, 0.3) -10px 10px, rgba(240, 46, 170, 0.2) -15px 15px,
       rgba(240, 46, 170, 0.1) -20px 20px, rgba(240, 46, 170, 0.05) -25px 25px;
   }
-  .container .signup .formBx {
+  .containerl .signup .formBx {
     background-color: white;
     z-index: 2;
     position: relative;
     left: -100%;
   }
-  .container.con-active .signup .formBx {
+  .containerl.con-active .signup .formBx {
     left: 0%;
   }
-  .container .signup .imgBx {
+  .containerl .signup .imgBx {
     z-index: 2;
     left: 100%;
   }
-  .container.con-active .signup .imgBx {
+  .containerl.con-active .signup .imgBx {
     left: 0%;
   }
-  .container .signin .imgBx {
+  .containerl .signin .imgBx {
     left: 0%;
   }
-  .container .signin .formBx {
+  .containerl .signin .formBx {
     left: 0%;
   }
-  .container.con-active .signin .imgBx {
+  .containerl.con-active .signin .imgBx {
     left: 100%;
   }
-  .container.con-active .signin .formBx {
+  .containerl.con-active .signin .formBx {
     left: -100%;
   }
   
