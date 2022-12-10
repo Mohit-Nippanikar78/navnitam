@@ -1,4 +1,12 @@
-import { AiFillBell, AiOutlineBell, AiOutlineMore } from "react-icons/ai";
+import {
+  AiFillBell,
+  AiFillBook,
+  AiFillFileMarkdown,
+  AiOutlineBell,
+  AiOutlineBook,
+  AiOutlineFileMarkdown,
+  AiOutlineMore,
+} from "react-icons/ai";
 import { AiOutlineTeam } from "react-icons/ai";
 import { AiOutlineCalendar, AiFillCalendar } from "react-icons/ai";
 import { BsChatLeftDots, BsReplyAll } from "react-icons/bs";
@@ -19,8 +27,8 @@ import {
   RiBookMarkFill,
 } from "react-icons/ri";
 import { FaListUl, FaListAlt } from "react-icons/fa";
- export const serverUrl = "https://navnitamfirst.herokuapp.com";
-//export const serverUrl = "http://localhost:3001";
+export const serverUrl = process.env.REACT_APP_SERVER_URL;
+//export const serverUrl = "http://localhost:3003";
 export const sidebarMenu = [
   {
     unactiveIcon: <AiOutlineBell size={24} />,
@@ -56,13 +64,6 @@ export const sidebarMenu = [
     activeIcon: <RiTeamFill size={24} />,
     name: "Students",
     to: "/students",
-    public: false,
-  },
-  {
-    unactiveIcon: <AiOutlineCalendar size={24} />,
-    activeIcon: <AiFillCalendar size={24} />,
-    name: "Calendar",
-    to: "/calendar",
     public: true,
   },
 
@@ -73,7 +74,29 @@ export const sidebarMenu = [
     to: "/requests",
     public: false,
   },
+  {
+    unactiveIcon: <AiOutlineFileMarkdown size={24} />,
+    activeIcon: <AiFillFileMarkdown size={24} />,
+    name: "Exams",
+    to: "/exams",
+    public: true,
+  },
+  {
+    unactiveIcon: <AiOutlineBook size={24} />,
+    activeIcon: <AiFillBook size={24} />,
+    name: "Notes",
+    to: "/notes",
+    public: true,
+  },
 ];
+export const testNames = ["Peroidical-1", "Term", "Peroidical-2", "Final"];
+// {
+//   unactiveIcon: <AiOutlineCalendar size={24} />,
+//   activeIcon: <AiFillCalendar size={24} />,
+//   name: "Calendar",
+//   to: "/calendar",
+//   public: true,
+// },
 // {
 //   unactiveIcon: <RiMessage2Line size={24} />,
 //   activeIcon: <RiMessage2Fill size={24} />,
@@ -114,6 +137,12 @@ export const sidebarMenu = [
 // *[_type == 'admin' && class == "CSE1B" ]{
 //   attendance[]{ "actorCount": count(time[subject == "maths"])}
 // }
+export const setUserInfo = (res) => {
+  localStorage.setItem(
+    "userInfo",
+    JSON.stringify({ _id: res._id, class: res.class })
+  );
+};
 export const userInfo = async () => {
   let obj = localStorage.getItem("userInfo");
   let userInfo = JSON.parse(obj);
@@ -123,7 +152,7 @@ export const fetchUser = async () => {
   let obj = await userInfo();
   let obj1;
   await Axios.get(serverUrl + `/students/${obj._id}`).then((res) => {
-    localStorage.setItem("userInfo", JSON.stringify(res.data));
+    setUserInfo(res.data);
     obj1 = res.data;
   });
   return obj1;

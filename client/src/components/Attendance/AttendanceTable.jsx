@@ -1,20 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { fetchUser, serverUrl, userInfo } from "../../utils";
+import React, { Suspense, useEffect, useState } from "react";
+import { fetchUser, serverUrl, userInfo } from "utils";
 import Axios from "axios";
 import { BsDot, BsFillCalendar2CheckFill } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 import { ImCross } from "react-icons/im";
 import { FaAngleRight } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
+import Spinner from "Elements/Spinner";
 const AttendanceTable = ({ studentId, setTable }) => {
   const [subjects, setSubjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetchUser().then((user) => {
-      Axios.get(serverUrl + `/subjects/${user.class}`).then((res) => {
-        setSubjects(res.data);
-      });
+      Axios.get(serverUrl + `/subjects/${user.class}`)
+        .then((res) => {
+          setSubjects(res.data);
+        })
+        .then(() => {
+          setLoading(false);
+        });
     });
   }, []);
+  if (loading) return <Spinner message="Getting Attendance..." />;
   return (
     <div>
       <div
@@ -54,19 +61,17 @@ const AttendanceTable = ({ studentId, setTable }) => {
 };
 const AttendanceSub = ({ subject, studentId, setTable }) => {
   let navigate = useNavigate();
-  const [lecPer, setLecPer] = useState(1);
+  const [lecPer, setLecPer] = useState();
   useEffect(() => {
     if (studentId == undefined) {
       userInfo().then((user) => {
         Axios.get(
           serverUrl + `/students/${user._id}?lecAtt=${subject._id}`
         ).then((res) => {
-          console.log(res.data);
           if (res.data.attCount == 0) {
-            setLecPer(1);
+            setLecPer(0);
           } else {
-            setLecPer(Math.floor((res.data.attCount / subject.lecCon) * 100));
-            console.log(Math.floor((res.data.attCount / subject.lecCon) * 100));
+            setLecPer(res.data.attPer);
           }
         });
       });
@@ -74,7 +79,7 @@ const AttendanceSub = ({ subject, studentId, setTable }) => {
       Axios.get(
         serverUrl + `/students/${studentId}?lecAtt=${subject._id}`
       ).then((res) => {
-        setLecPer(Math.floor((res.data.attCount / subject.lecCon) * 100));
+        setLecPer(res.data.attPer);
       });
     }
   }, []);
@@ -84,7 +89,6 @@ const AttendanceSub = ({ subject, studentId, setTable }) => {
       className=" justify-between mx-4 flex border-t cursor-pointer "
       style={{ backgroundColor: "#fffada" }}
       onClick={() => {
-        // navigate(`/attendance/${subject._id}`);
         if (setTable) {
           setTable({
             state: { subjectId: subject._id, studentId },

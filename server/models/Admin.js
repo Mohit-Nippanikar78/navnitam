@@ -29,6 +29,7 @@ const AdminSchema = new mongoose.Schema({
   },
 
 },{ toJSON: { virtuals:true } });
+
 AdminSchema.virtual("studentsCount").get(function () {
   return this.students.length;
 });

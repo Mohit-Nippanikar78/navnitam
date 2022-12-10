@@ -2,6 +2,7 @@ const Attendance = require("../models/Attendance");
 const Student = require("../models/Student");
 const Notify = require("../models/Notify");
 const Subject = require("../models/Subject");
+const updateAttPer = require("../elements/UpdateAttPer");
 const addAttendance = async (req, res) => {
   let { studentId, date, startTime, endTime, subjectId } = req.body;
   let lecAttAlready = await Student.find({
@@ -14,7 +15,9 @@ const addAttendance = async (req, res) => {
     Student.findByIdAndUpdate(
       studentId,
       {
-        $push: { lecAtt: { subjectId, attCount: sub.lecCon - 1 } },
+        $push: {
+          lecAtt: { subjectId, attCount: sub.lecCon - 1, attPer: 0 },
+        },
       },
       function (error, success) {
         if (error) {
@@ -35,8 +38,11 @@ const addAttendance = async (req, res) => {
 
   if (already.length == 0) {
     try {
-      let attend = await new Attendance(req.body);
+      let attend = new Attendance(req.body);
       let { present, _id } = attend;
+      Student.find({ "lecAtt.attPer": { $exists: false } }).then((res) => {
+        console.log(res);
+      });
       if (present) {
         await Student.updateOne(
           { _id: studentId, "lecAtt.subjectId": subjectId },
@@ -51,6 +57,7 @@ const addAttendance = async (req, res) => {
           timing: startTime + "-" + endTime,
         });
       }
+      updateAttPer(studentId);
 
       await attend.save();
       res.send({ present, _id });
@@ -87,6 +94,7 @@ const updateAttendance = async (req, res) => {
         { $inc: { "lecAtt.$.attCount": -1 } }
       );
     }
+    updateAttPer(studentId);
     res.send("done updating");
   } catch (error) {
     console.log(error);

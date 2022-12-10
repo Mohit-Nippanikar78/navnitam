@@ -5,7 +5,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 import { fetchUser, userInfo, serverUrl } from "../utils";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Spinner from "./Spinner";
+import Spinner from "../Elements/Spinner";
 const Subjects = () => {
   const [newSubject, setNewSubject] = useState(false);
   const [editSubject, setEditSubject] = useState({ order: false, subId: "" });
@@ -16,12 +16,12 @@ const Subjects = () => {
     let paramss = new URLSearchParams(window.location.search);
     paramss.get("new") == "true" && setNewSubject(true);
 
-    userInfo().then((user) => {
+    fetchUser().then((user) => {
+      user.administrator && setAdmin(true)
       Axios.get(serverUrl + `/subjects/${user.class}`).then((res) => {
         setSubs(res.data);
         setLoading(false);
       });
-      userInfo().then((user) => user.administrator && setAdmin(true));
     });
   }, []);
   useEffect(() => {
@@ -169,12 +169,7 @@ const NewSubject = ({ setNewSubject, setEditSubject, editSubject }) => {
                     });
                   } else {
                     fetchUser().then((user) => {
-                      console.log({
-                        admin: user.class,
-                        faculty: subTr,
-                        subjectCode: subCode,
-                        subjectName: subName,
-                      });
+                     
                       Axios.post(serverUrl + `/subjects/add`, {
                         admin: user.class,
                         faculty: subTr,

@@ -4,16 +4,27 @@ const allStudents = async (req, res) => {
   let { classId } = req.params;
   try {
     let students = await Student.find({ class: classId }).sort({ rollNo: 1 });
-    res.send(students);
+    if (req.query?.onlyIds) {
+      let tempStus = students.map((item) => {
+        return item._id;
+      });
+      res.send(tempStus);
+    } else {
+      let tempStus = students.map((item) => {
+        let { _id, rollNo, name } = item;
+        return { _id, rollNo, name };
+      });
+      res.send(tempStus);
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
 const addStudent = async (req, res) => {
-  let alreadyStudent = await Student.findOne({ email: req.body.email });
-  if (alreadyStudent == null) {
-    const student = await new Student(req.body);
+  let alreadyStudent = await Student.find({ email: req.body.email });
+  if (alreadyStudent.length == 0) {
+    const student = new Student(req.body);
 
     try {
       await student.save();
@@ -22,7 +33,7 @@ const addStudent = async (req, res) => {
       console.log(error);
     }
   } else {
-    res.send(alreadyStudent);
+    res.send(alreadyStudent[0]);
   }
 };
 const updateStudent = async (req, res) => {
@@ -51,7 +62,12 @@ const getStudent = async (req, res) => {
 
       res.send({
         attCount: lecAttSub?.attCount,
+        attPer: lecAttSub?.attPer,
       });
+    } else if (req.query?.info) {
+      const user = await Student.findById(id);
+      let { name, rollNo } = user;
+      res.send({ name, rollNo });
     } else if (req.query?.lecAttCount) {
       const user = await Student.findById(id).populate("lecAtt").exec();
       let lecAttCount = 0;

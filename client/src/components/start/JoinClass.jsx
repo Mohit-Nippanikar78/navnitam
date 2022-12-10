@@ -3,22 +3,21 @@ import { BsPeopleFill } from "react-icons/bs";
 import { RiAdminFill } from "react-icons/ri";
 import Axios from "axios";
 import moment from "moment";
-import { getAdmins, userInfo, serverUrl } from "../../utils";
-import Modals from "../Elements/Modals";
+import { getAdmins, userInfo, serverUrl, fetchUser } from "../../utils";
+import Modals from "../../Elements/Modals";
 
 const JoinClass = () => {
   const [admins, setAdmins] = useState([]);
   const [modal, setModal] = useState(false);
   useEffect(() => {
+    fetchUser().then((user)=>{
+      user.class !== null && window.location.reload()
+    })
     Axios.get(serverUrl + `/admin/all`).then((res) => {
       setAdmins(res.data);
     });
   }, []);
-  useEffect(() => {
-    console.log("mjffhfhfh" + modal);
-
-    return () => {};
-  }, [modal]);
+ 
 
   return (
     <div>
@@ -56,7 +55,6 @@ const Class = ({ info, setModal }) => {
     });
   }, []);
   useEffect(() => {
-    console.log(applied, clicked);
     if (clicked) {
       if (applied) {
         setModal(true);

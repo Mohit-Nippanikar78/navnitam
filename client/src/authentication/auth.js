@@ -7,7 +7,6 @@ const socialMediaAuth = async (params) => {
   } else if (params == "Google") {
     provider = new GoogleAuthProvider();
   }
-  console.log(params,provider)
   let data;
   await signInWithPopup(authentication, provider)
     .then((res) => {

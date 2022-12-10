@@ -7,10 +7,10 @@ import moment from "moment";
 import { IoMdAdd } from "react-icons/io";
 import React, { forwardRef, useEffect, useState } from "react";
 import TimeRange from "react-time-range";
-import { userInfo, serverUrl } from "../utils";
-import Spinner from "./Spinner";
+import { userInfo, serverUrl } from "utils";
+import Spinner from "Elements/Spinner";
 import { Link, useNavigate } from "react-router-dom";
-const Presenty = ({ admin }) => {
+const SinglyMarking = ({ admin }) => {
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
   const [startDate, setStartDate] = useState();
@@ -22,9 +22,11 @@ const Presenty = ({ admin }) => {
   const [loading, setLoading] = useState(true);
   const [done, setDone] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [batch, setBatch] = useState(0);
 
   let navigate = useNavigate();
   useEffect(() => {
+    console.log("1");
     userInfo()
       .then((user) => {
         Axios.get(serverUrl + `/subjects/${user.class}`).then((res) =>
@@ -44,7 +46,6 @@ const Presenty = ({ admin }) => {
       });
   }, []);
   useEffect(() => {
-    console.log(initPresent);
     let newArr = [...students];
     let newArr1 = newArr.map((item) => ({ ...item, present: initPresent }));
     setStudents(newArr1);
@@ -163,6 +164,50 @@ const Presenty = ({ admin }) => {
           </button>
         </div>
       </div>
+      <div className="mb-4">
+        <div className="text-lg flex items-center  ">
+          <div className="flex text-gray-700 mx-2 text-sm font-bold mb-2">
+            Batch :
+          </div>
+
+          <button
+            onClick={() => setBatch(0)}
+            type="button"
+            className={
+              batch == 0
+                ? "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                : "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 "
+            }
+            disabled={disabled}
+          >
+            All
+          </button>
+          <button
+            onClick={() => setBatch(1)}
+            type="button"
+            className={
+              batch == 1
+                ? "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                : "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 "
+            }
+            disabled={disabled}
+          >
+            Batch 1
+          </button>
+          <button
+            disabled={disabled}
+            onClick={() => setBatch(2)}
+            type="button"
+            className={
+              batch == 2
+                ? "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                : "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 "
+            }
+          >
+            Batch 2
+          </button>
+        </div>
+      </div>
 
       <div className="flex items-center justify-between">
         <button
@@ -181,7 +226,7 @@ const Presenty = ({ admin }) => {
         </button>
       </div>
       {create && (
-        <PresentyAttendance
+        <SinglyAttendance
           students={students}
           setStudents={setStudents}
           startTime={startTime}
@@ -191,18 +236,20 @@ const Presenty = ({ admin }) => {
           activeSub={activeSub}
           initPresent={initPresent}
           setDone={setDone}
+          batch={batch}
         />
       )}
     </div>
   );
 };
 
-const PresentyAttendance = ({
+const SinglyAttendance = ({
   students,
   setStudents,
   startTime,
   endTime,
   startDate,
+  batch,
   subjects,
   activeSub,
   initPresent,
@@ -243,22 +290,58 @@ const PresentyAttendance = ({
                 </thead>
                 <tbody>
                   {students?.map((student, i) => {
-                    return (
-                      <PresentyS
-                        student={student}
-                        students={students}
-                        setStudents={setStudents}
-                        key={i}
-                        i={i}
-                        startTime={startTime}
-                        endTime={endTime}
-                        startDate={startDate}
-                        subjects={subjects}
-                        activeSub={activeSub}
-                        initPresent={initPresent}
-                        setDone={setDone}
-                      />
-                    );
+                    if (batch == 0) {
+                      return (
+                        <SinglyS
+                          student={student}
+                          students={students}
+                          setStudents={setStudents}
+                          key={i}
+                          i={i}
+                          startTime={startTime}
+                          endTime={endTime}
+                          startDate={startDate}
+                          subjects={subjects}
+                          activeSub={activeSub}
+                          initPresent={initPresent}
+                          setDone={setDone}
+                        />
+                      );
+                    } else if (batch == 1 && student.rollNo < 70) {
+                      return (
+                        <SinglyS
+                          student={student}
+                          students={students}
+                          setStudents={setStudents}
+                          key={i}
+                          i={i}
+                          startTime={startTime}
+                          endTime={endTime}
+                          startDate={startDate}
+                          subjects={subjects}
+                          activeSub={activeSub}
+                          initPresent={initPresent}
+                          setDone={setDone}
+                        />
+                      );
+                    } else if (batch == 2 && student.rollNo > 69) {
+                      return (
+                        <SinglyS
+                          student={student}
+                          students={students}
+                          setStudents={setStudents}
+                          key={i}
+                          i={i}
+                          startTime={startTime}
+                          endTime={endTime}
+                          startDate={startDate}
+                          subjects={subjects}
+                          activeSub={activeSub}
+                          initPresent={initPresent}
+                          setDone={setDone}
+                        />
+                      );
+                    }
                   })}
                   <tr className="odd:bg-white border-b even:bg-gray-100 tdpresent">
                     <td
@@ -287,7 +370,7 @@ const PresentyAttendance = ({
     </div>
   );
 };
-const PresentyS = ({
+const SinglyS = ({
   student,
   students,
   setStudents,
@@ -303,17 +386,16 @@ const PresentyS = ({
   const [first, setFirst] = useState(true);
   const [resId, setResId] = useState("");
   useEffect(() => {
-    console.log(subjects);
     if (first) {
       console.log("first add");
-      console.log({
-        studentId: student._id,
-        present: initPresent,
-        date: moment(startDate).format("DD/MM/YYYY"),
-        startTime: moment(startTime).format("LT"),
-        endTime: moment(endTime).format("LT"),
-        subjectId: subjects[activeSub].subId,
-      });
+      // console.log({
+      //   studentId: student._id,
+      //   present: initPresent,
+      //   date: moment(startDate).format("DD/MM/YYYY"),
+      //   startTime: moment(startTime).format("LT"),
+      //   endTime: moment(endTime).format("LT"),
+      //   subjectId: subjects[activeSub].subId,
+      // });
       Axios.post(serverUrl + `/attendance/add`, {
         studentId: student._id,
         present: initPresent,
@@ -332,7 +414,7 @@ const PresentyS = ({
         id: resId,
         present: present,
         studentId: student._id,
-      }).then((res) => console.log(res));
+      }).then((res) => {});
     }
   }, [present]);
   return (
@@ -365,4 +447,4 @@ const PresentyS = ({
   );
 };
 
-export default Presenty;
+export default SinglyMarking;

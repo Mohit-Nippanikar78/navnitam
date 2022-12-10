@@ -125,3 +125,6 @@ td input {
 	transform-origin: 0 50%;
 	z-index: -1;
 }
+.cloudinary-bg{
+	background-color: rgb(56, 71, 191);
+}

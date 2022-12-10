@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { fetchUser, serverUrl } from "../utils";
 import Axios from "axios";
-import Spinner from "./Spinner";
+import Spinner from "../Elements/Spinner";
 const Requests = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const getpending = async () => {
       let obj = await fetchUser();
-      console.log(obj);
 
       Axios.get(serverUrl + `/admin/pendingStudents/${obj.class}`).then(
         (res) => {
-          console.log(res.data);
           setRequests(res.data.pendingStudents);
           setLoading(false);
         }

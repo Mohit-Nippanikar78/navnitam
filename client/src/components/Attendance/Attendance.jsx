@@ -9,13 +9,13 @@ import Axios from "axios";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 
 import { Link, Outlet } from "react-router-dom";
-import { fetchUser, serverUrl } from "../../utils";
-import Spinner from "../Spinner";
+import { fetchUser, serverUrl } from "utils";
+import Spinner from "Elements/Spinner";
 
 const Attendance = () => {
   const [loading, setLoading] = useState(true);
-  const [subCount, setSubCount] = useState(0);
-  const [totalLecAtt, setTotalLecAtt] = useState(1);
+  const [subCount, setSubCount] = useState();
+  const [totalLecAtt, setTotalLecAtt] = useState();
   useEffect(() => {
     fetchUser()
       .then((user) => {
@@ -31,9 +31,7 @@ const Attendance = () => {
         );
       })
       .then(() => {
-        setTimeout(() => {
-          setLoading(false);
-        }, 2000);
+        setLoading(false);
       });
   }, []);
   if (loading) return <Spinner message="Getting Attendances" />;
@@ -70,7 +68,7 @@ const Attendance = () => {
           <FaAngleRight size={20} />
         </div>
       </Link>
-      <div className="bg-slate-50 justify-between m-4 flex shadow-md ">
+      {/* <div className="bg-slate-50 justify-between m-4 flex shadow-md ">
         <div className="flex ">
           <div className="flex mx-2 ">
             <BsFillCalendar2WeekFill
@@ -84,9 +82,9 @@ const Attendance = () => {
             <div className="text-sm ">Total days of College</div>
           </div>
         </div>
-        {/* <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center">
           <FaAngleRight size={20} />
-        </div> */}
+        </div>
       </div>
       <div className="bg-slate-50 justify-between m-4 flex shadow-md ">
         <div className="flex ">
@@ -98,10 +96,10 @@ const Attendance = () => {
             <div className="text-sm ">Notes downloaded</div>
           </div>
         </div>
-        {/* <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center">
           <FaAngleRight size={20} />
-        </div> */}
-      </div>
+        </div>
+      </div> */}
       {/* // overall attendance */}
       <Outlet />
     </div>

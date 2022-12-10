@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Image1 from "../assets/notifications.svg";
+import Image1 from "assets/notifications.svg";
 import Axios from "axios";
 import { userInfo, serverUrl } from ".././utils";
 import { FaBookDead } from "react-icons/fa";
 import moment from "moment";
-import Spinner from "./Spinner";
+import Spinner from "Elements/Spinner";
 const Activity = ({ studentId }) => {
-  const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [models, setModels] = useState();
   const [admin, setAdmin] = useState(false);
   useEffect(() => {
     if (studentId == undefined) {
@@ -31,8 +31,10 @@ const Activity = ({ studentId }) => {
         });
     }
   }, []);
-  if (loading) return <Spinner message="Getting Notifications..." />;
-  if (models.length == 0) {
+
+  if (loading) {
+    return <Spinner message="Getting Notifications..." />;
+  } else if (models?.length == 0) {
     return (
       <div
         className=" flex items-center justify-center "
@@ -49,41 +51,41 @@ const Activity = ({ studentId }) => {
         </div>
       </div>
     );
-  }
-  return (
-    <div className="w-full  h-full ">
-      <div className=" bg-gray-50 p-8  right-0">
-        <div className="flex items-center justify-between">
-          <p className="text-2xl font-semibold leading-6 text-gray-800">
-            Notifications
-          </p>
-        </div>
+  } else
+    return (
+      <div className="w-full  h-full ">
+        <div className=" bg-gray-50 p-8  right-0">
+          <div className="flex items-center justify-between">
+            <p className="text-2xl font-semibold leading-6 text-gray-800">
+              Notifications
+            </p>
+          </div>
 
-        {/* <h2 className="text-sm leading-normal pt-8 border-b pb-2 border-gray-300 text-gray-600">
+          {/* <h2 className="text-sm leading-normal pt-8 border-b pb-2 border-gray-300 text-gray-600">
           YESTERDAY
         </h2> */}
-        {models.map((Noti, i) => {
-          return (
-            <NotifyBox
-              Noti={Noti}
-              models={models}
-              setModels={setModels}
-              key={i}
-              admin={admin}
-            />
-          );
-        })}
+          {models?.map((Noti, i) => {
+            return (
+              <NotifyBox
+                Noti={Noti}
+                models={models}
+                setModels={setModels}
+                key={i}
+                admin={admin}
+              />
+            );
+          })}
 
-        <div className="flex items-center justiyf-between">
-          <hr className="w-full" />
-          <p className="text-sm flex flex-shrink-0 leading-normal px-3 py-16 text-gray-500">
-            Thats it for now :)
-          </p>
-          <hr className="w-full" />
+          <div className="flex items-center justiyf-between">
+            <hr className="w-full" />
+            <p className="text-sm flex flex-shrink-0 leading-normal px-3 py-16 text-gray-500">
+              Thats it for now :)
+            </p>
+            <hr className="w-full" />
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 };
 const NotifyBox = ({ Noti, models, setModels, admin }) => {
   if (Noti.type == "absenty") {
@@ -107,10 +109,12 @@ const NotifyBox = ({ Noti, models, setModels, admin }) => {
           <p className="text-sm leading-none text-red-700">
             {admin ? "Student was " : "You were "} marked Absent for
             <span className="text-indigo-700">
-              {" " + Noti.subjectId.subjectName + " "}
+              {" " + Noti.subjectName + " "}
             </span>
             lecture conducted on
-            <span className="text-indigo-700">{Noti.absentDate}</span>
+            <span className="text-indigo-700">
+              {" " + Noti.absentDate + " "}
+            </span>
             at
             <span className="text-indigo-700">{" " + Noti.timing}</span>
           </p>
@@ -223,7 +227,7 @@ const NotifyBox = ({ Noti, models, setModels, admin }) => {
         </div>
       </div>
     );
-  } else if (Noti.type == "message") {
+  } else if (Noti.type == "ExamAdded") {
     return (
       <div className="w-full p-3 mt-4 bg-white rounded flex">
         <div className="w-8 h-8 border rounded-full border-gray-200 flex items-center justify-center">
@@ -242,8 +246,10 @@ const NotifyBox = ({ Noti, models, setModels, admin }) => {
         </div>
         <div className="pl-3">
           <p className="text-sm leading-none">
-            <span className="text-indigo-700">Sarah</span> posted in the thread:
-            <span className="text-indigo-700">Update gone wrong</span>
+            Add your Marks for new
+            <span className="text-indigo-700">{" " + Noti.examName + " "}</span>
+            exam of
+            <span className="text-indigo-700">{` ${Noti.subjects} `}</span>
           </p>
           <p className="text-xs leading-3 pt-1 text-gray-500">
             {moment(Noti.date).fromNow()}

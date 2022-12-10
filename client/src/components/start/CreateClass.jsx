@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Axios from "axios";
-import { userInfo, serverUrl } from "../../utils";
+import { userInfo, serverUrl, setUserInfo } from "../../utils";
 import { useNavigate } from "react-router-dom";
 const CreateClass = () => {
   const [info, setInfo] = useState({
@@ -99,10 +99,7 @@ const CreateClass = () => {
                         serverUrl + `/students/edit/${user._id}`,
                         user
                       ).then((res) => {
-                        localStorage.setItem(
-                          "userInfo",
-                          JSON.stringify(res.data)
-                        );
+                       setUserInfo(res.data)
                       });
                     })
                     .then(() => {

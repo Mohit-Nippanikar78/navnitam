@@ -31,13 +31,13 @@ const getAllAdminPendingStudents = async (req, res) => {
   }
 };
 const updateAdminPendingStudents = async (req, res) => {
-  let present = await Admin.find({
-    _id: req.body.classId,
-    pendingStudents: { $in: [req.body.studentId] },
-  });
-  if (present.length == 0) {
+  console.log(req.body);
+  let Adminn = await Admin.findById(req.body.classId);
+  let present = Adminn.students.includes(req.body.studentId);
+  console.log("fjfjfjfjfddd", present);
+  if (!present) {
     try {
-      Admin.findByIdAndUpdate(
+     await Admin.findByIdAndUpdate(
         req.body.classId,
         {
           $push: { pendingStudents: req.body.studentId },
@@ -82,8 +82,8 @@ const updateAdminStudents = async (req, res) => {
     _id: req.body.classid,
     students: { $in: [req.body.studentId] },
   });
+  console.log(Already);
   if (Already.length == 0) {
-  
     try {
       Admin.findByIdAndUpdate(
         req.body.classId,
@@ -106,11 +106,21 @@ const updateAdminStudents = async (req, res) => {
 };
 const getAdmin = async (req, res) => {
   let { adminId } = req.params;
-
   try {
     if (req.query?.students) {
       let adminn = await Admin.findById(adminId).populate("students").exec();
+      adminn.students.sort(function (a, b) {
+        return a.rollNo - b.rollNo;
+      });
       res.send(adminn.students);
+    } else if (req.query?.info) {
+      let adminn = await Admin.findById(adminId).populate("crName").exec();
+
+      res.send({
+        className: adminn.name,
+        sCount: adminn.students.length,
+        crName: adminn.crName.name,
+      });
     } else {
       let adminn = await Admin.findById(adminId);
       res.send(adminn);
@@ -123,7 +133,10 @@ const removeAdminStudents = async (req, res) => {
   let { classId, studentId } = req.body;
   try {
     await Admin.findByIdAndUpdate(classId, { $pull: { students: studentId } });
-    await Student.findByIdAndUpdate(studentId, { class: null });
+    await Student.findByIdAndUpdate(studentId, {
+      class: null,
+      administrator: false,
+    });
     res.send("adjddhdh");
   } catch (error) {
     console.log(error);

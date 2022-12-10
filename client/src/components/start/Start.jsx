@@ -4,6 +4,7 @@ import Axios from "axios";
 import { userInfo, serverUrl, fetchUser } from "../../utils";
 const Start = () => {
   const [roll, setRoll] = useState("");
+  const [user, setUser] = useState({});
   const navigate = useNavigate();
   const styles = {
     backgroundColor: "#ffffff",
@@ -14,14 +15,17 @@ const Start = () => {
   const updateRollNo = () => {
     userInfo().then((user) => {
       user.rollNo = roll;
-      Axios.put(serverUrl + `/students/edit/${user._id}`, user).then((res) =>
-        localStorage.setItem("userInfo", JSON.stringify(res.data))
-      );
+      Axios.put(serverUrl + `/students/edit/${user._id}`, user);
     });
   };
   useEffect(() => {
-    fetchUser().then((user) => {
-      user.class !== null && navigate("/");
+    // userInfo().then((res) => {
+    //   Object.keys(res).length === 0 && navigate("/login")
+    // });
+    fetchUser().then((res) => {
+      setUser(res);
+
+      res.class !== null && navigate("/");
     });
   }, []);
 
@@ -29,35 +33,39 @@ const Start = () => {
     <div style={styles} className="h-screen">
       <div className="w-full flex items-center justify-center">
         <div className="mb-3 w-full flex flex-wrap">
-          <label
-            htmlFor="exampleNumber0"
-            className="m-2 flex  items-center font-extrabold form-label  mb-2 text-gray-700"
-          >
-            Enter Roll Number
-          </label>
-          <input
-            type="number"
-            value={roll}
-            className="   p-2 my-2 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-            id="exampleNumber0"
-            placeholder="Roll No ..."
-            onChange={(e) => {
-              setRoll(e.target.value);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                updateRollNo();
-              }
-            }}
-          />
-          <button
-            className=" m-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => {
-              updateRollNo();
-            }}
-          >
-            Save
-          </button>
+          {user.hasOwnProperty("rollNo") == false && (
+            <div>
+              <label
+                htmlFor="exampleNumber0"
+                className="m-2 flex  items-center font-extrabold form-label  mb-2 text-gray-700"
+              >
+                Enter Roll Number
+              </label>
+              <input
+                type="number"
+                value={roll}
+                className="   p-2 my-2 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                id="exampleNumber0"
+                placeholder="Roll No ..."
+                onChange={(e) => {
+                  setRoll(e.target.value);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    updateRollNo();
+                  }
+                }}
+              />
+              <button
+                className=" m-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                onClick={() => {
+                  updateRollNo();
+                }}
+              >
+                Save
+              </button>
+            </div>
+          )}
           <div className="flex w-full justify-center">
             <button
               className=" m-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

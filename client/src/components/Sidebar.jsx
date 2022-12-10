@@ -4,7 +4,8 @@ import { AiOutlineMore } from "react-icons/ai";
 import { motion, AnimatePresence } from "framer-motion";
 import OutsideClickHandler from "react-outside-click-handler";
 import { fetchUser, sidebarMenu, serverUrl } from "../utils";
-import { Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import history from "history";
 const Sidebar = ({ sidebarWidth }) => {
   const [admin, setAdmin] = useState(false);
 
@@ -12,6 +13,8 @@ const Sidebar = ({ sidebarWidth }) => {
   const [showSidebarButton, setShowSidebarButton] = useState([]);
   const [extraSidebarButton, setExtraSidebarButton] = useState([]);
   const [sidebarOptionsToggle, setSidebarOptionsToggle] = useState(false);
+  const location = useLocation();
+
   useEffect(() => {
     if (window.innerWidth > 768) {
       setShowSidebarButton(sidebarMenu);
@@ -19,10 +22,21 @@ const Sidebar = ({ sidebarWidth }) => {
       setSidebarButtonsToShow();
     }
     fetchUser().then((res) => {
-      console.log(res);
       res.administrator && setAdmin(true);
     });
   }, []);
+  useEffect(() => {
+    onHashChanges();
+  }, [location]);
+  async function onHashChanges() {
+    let indexofbuttons = showSidebarButton
+      .map(function (e) {
+        return e.to.split("/")[1];
+      })
+      .indexOf(window.location.pathname.split("/")[1]);
+    setActiveSidebarButton(indexofbuttons);
+  }
+
   const setSidebarButtonsToShow = () => {
     var sidebarButtonsToShowMobile = Math.ceil(window.innerWidth / 100);
     if (sidebarButtonsToShowMobile >= sidebarMenu.length) {
@@ -45,8 +59,8 @@ const Sidebar = ({ sidebarWidth }) => {
   };
 
   useEffect(() => {
-    console.log(extraSidebarButton);
-  }, [extraSidebarButton]);
+    onHashChanges();
+  }, [showSidebarButton]);
 
   const [sidebarMenuExtra, setSidebarMenuExtra] = useState([]);
 
@@ -146,7 +160,7 @@ const SidebarButtons = ({
     <div
       className={`flex ${
         window.innerWidth > 768 ? "py-2" : "px-2"
-      } z-10   overflow-hidden flex-col items-center justify-center cursor-pointer w-full border-box`}
+      } z-40   overflow-hidden flex-col items-center justify-center cursor-pointer w-full border-box`}
       key={i ? i : null}
       onMouseEnter={() => {
         if (window.innerWidth > 768) {

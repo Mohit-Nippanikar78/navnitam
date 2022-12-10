@@ -3,7 +3,7 @@ const Admin = require("../models/Admin");
 const Student = require("../models/Student");
 const addSubject = async (req, res) => {
   try {
-    let subject = await new Subject(req.body);
+    let subject = new Subject(req.body);
     let classs = await Admin.findById(req.body.admin);
     classs.students.map((item) => {
       Student.findByIdAndUpdate(
@@ -40,7 +40,14 @@ const getSubjects = async (req, res) => {
     let { classId } = req.params;
     if (req.query.count) {
       const subCount = await Subject.find({ admin: classId }).count();
-   res.send({ subCount });
+      res.send({ subCount });
+    } else if (req.query.name) {
+      const subs = await Subject.find({ admin: classId });
+      let subss = subs.map((item) => {
+        let { subjectName } = item;
+        return subjectName;
+      });
+      res.send(subss);
     } else {
       const subjects = await Subject.find({ admin: classId });
       res.send(subjects);

@@ -6,7 +6,7 @@ import { AiOutlineGoogle } from "react-icons/ai";
 import socialMediaAuth from "../../authentication/auth";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
-import { userInfo, serverUrl } from "../../utils";
+import { userInfo, serverUrl, setUserInfo } from "../../utils";
 
 const Login = () => {
   const [screenWidth, setScreenWidth] = useState();
@@ -17,15 +17,16 @@ const Login = () => {
   let navigate = useNavigate();
   const signInParent = async (params) => {
     let data = await socialMediaAuth(params);
-    let { fullName, email, localId } = data;
+    let { fullName, email, photoUrl } = data;
     const doc = {
       name: fullName,
       email: email,
       verified: false,
+      profile: photoUrl,
     };
 
     Axios.post(serverUrl + `/students/add`, doc).then(async (res) => {
-      localStorage.setItem("userInfo", JSON.stringify(res.data));
+      setUserInfo(res.data);
       if (res.data.class == null || res.data.rollNo == null) {
         navigate("/start", { replace: true });
       } else {
@@ -114,12 +115,6 @@ const Login = () => {
           </div>
         </div>
       </section>
-      <button
-        title="Contact Sale"
-        className="fixed z-90 bottom-10 right-8 bg-blue-600 w-20 h-20 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl hover:bg-blue-700 hover:drop-shadow-2xl hover:animate-bounce duration-300"
-      >
-        &#9993;
-      </button>
     </div>
   );
 };

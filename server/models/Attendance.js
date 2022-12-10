@@ -16,6 +16,7 @@ const Attendance = mongoose.model("Attendance", AttendanceSchema);
 
 const changeStream = Attendance.watch();
 changeStream.on("change", async (next) => {
+  
   await Attendance.deleteMany({
     createdAt: {
       $lte: new Date(new Date().getTime() - 14 * 24 * 60 * 60 * 1000),

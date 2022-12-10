@@ -1,5 +1,5 @@
 import React from "react";
-import { serverUrl, userInfo } from "../../utils";
+import { serverUrl, userInfo } from "../utils";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FiAlertTriangle } from "react-icons/fi";
@@ -10,6 +10,7 @@ const Modals = ({
   confirmBox,
   operation,
   studentId,
+  folderId,
 }) => {
   let navigate = useNavigate();
   return (
@@ -87,6 +88,21 @@ const Modals = ({
                         }).then(() => {
                           navigate("/students", { replace: true });
                         });
+                      });
+                    } else if (operation == "deleteFolder") {
+                      Axios.delete(
+                        serverUrl + `/notesFolder/delete/${folderId}`
+                      ).then(() => {
+                        navigate(-1);
+                      });
+                    } else if (operation == "deleteFile") {
+                      Axios.delete(
+                        serverUrl +
+                          `/notesPdf/delete/${
+                            window.location.href.split("/")[6]
+                          }`
+                      ).then(() => {
+                        navigate(-1);
                       });
                     }
                   }}
