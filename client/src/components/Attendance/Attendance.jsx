@@ -12,23 +12,19 @@ import { Link, Outlet } from "react-router-dom";
 import { fetchUser, serverUrl } from "utils";
 import Spinner from "Elements/Spinner";
 
-const Attendance = () => {
+const Attendance = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [subCount, setSubCount] = useState();
   const [totalLecAtt, setTotalLecAtt] = useState();
   useEffect(() => {
-    fetchUser()
-      .then((user) => {
-        Axios.get(serverUrl + `/students/${user._id}?lecAttCount=true`).then(
-          (res) => {
-            setTotalLecAtt(res.data.lecAttCount);
-          }
-        );
-        Axios.get(serverUrl + `/subjects/${user.class}?count=true`).then(
-          (res) => {
-            setSubCount(res.data.subCount);
-          }
-        );
+    Axios.get(serverUrl + `/students/${user._id}?lecAttCount=true`).then(
+      (res) => {
+        setTotalLecAtt(res.data.lecAttCount);
+      }
+    );
+    Axios.get(serverUrl + `/subjects/${user.class}?count=true`)
+      .then((res) => {
+        setSubCount(res.data.subCount);
       })
       .then(() => {
         setLoading(false);

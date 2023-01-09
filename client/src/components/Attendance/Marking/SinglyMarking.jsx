@@ -10,7 +10,7 @@ import TimeRange from "react-time-range";
 import { userInfo, serverUrl } from "utils";
 import Spinner from "Elements/Spinner";
 import { Link, useNavigate } from "react-router-dom";
-const SinglyMarking = ({ admin }) => {
+const SinglyMarking = ({ user }) => {
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
   const [startDate, setStartDate] = useState();
@@ -105,7 +105,7 @@ const SinglyMarking = ({ admin }) => {
               );
             })}
           </select>
-          {admin && (
+          {user?.administrator && (
             <Link
               to={`/subjects/?new=true`}
               className="bg-black text-white rounded-lg w-12 h-12 md:w-14 md:h-12 flex justify-center items-center"

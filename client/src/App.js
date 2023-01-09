@@ -3,7 +3,7 @@ import { Sidebar, Subjects } from "components";
 import { useState, useEffect, lazy, Suspense } from "react";
 import { JoinClass, Login } from "components/start/index";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { fetchUser, userInfo, serverUrl, setUserInfo } from "utils";
+import { fetchUser, userInfo, serverUrl } from "utils";
 import Start from "components/start/Start";
 import CreateClass from "components/start/CreateClass";
 import Axios from "axios";
@@ -13,26 +13,24 @@ function App() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    console.log(window.location)
+    console.log(window.location);
     userInfo().then((obj) => {
       if (obj == null || obj == "" || Object.keys(obj).length === 0) {
-        
         navigate("/login", { replace: true });
       } else {
-        
-        Axios.get(serverUrl + `/students/${obj._id}`).then((res) => {
-          if (res.data == "") {
-            navigate("/login", { replace: true });
-          }
+        Axios.get(serverUrl + `/students/${obj._id}?ClassAllot=true`).then(
+          (res) => {
+            if (res.data == "") {
+              navigate("/login", { replace: true });
+            }
 
-          if (res.data.class == null) {
-            navigate("/start", { replace: true });
-          } else {  
-            setUserInfo(res.data);
+            if (!res.data.ClassAlloted) {
+              navigate("/start", { replace: true });
+            }
           }
-        });
+        );
       }
-      console.log(window.location)
+      console.log(window.location);
     });
   }, []);
   return (

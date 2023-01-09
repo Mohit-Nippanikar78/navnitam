@@ -17,7 +17,7 @@ import { MdEdit } from "react-icons/md";
 import Modals from "Elements/Modals";
 import { IoReorderTwo } from "react-icons/io5";
 
-const Navbar = ({ searchTerm, setSearchTerm, user, admin }) => {
+const Navbar = ({ searchTerm, setSearchTerm, user }) => {
   let navigate = useNavigate();
   const location = useLocation();
   const [dropdown, setDropdown] = useState(false);

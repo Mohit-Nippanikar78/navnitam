@@ -3,9 +3,9 @@ import { AiOutlineMore } from "react-icons/ai";
 
 import { motion, AnimatePresence } from "framer-motion";
 import OutsideClickHandler from "react-outside-click-handler";
-import { fetchUser, sidebarMenu, serverUrl } from "../utils";
+import { fetchUser, serverUrl, sidebarMenu, userInfo } from "../utils";
 import { useLocation, useNavigate } from "react-router-dom";
-import history from "history";
+import axios from "axios";
 const Sidebar = ({ sidebarWidth }) => {
   const [admin, setAdmin] = useState(false);
 
@@ -21,8 +21,12 @@ const Sidebar = ({ sidebarWidth }) => {
     } else {
       setSidebarButtonsToShow();
     }
-    fetchUser().then((res) => {
-      res.administrator && setAdmin(true);
+
+    userInfo().then((user) => {
+      axios.get(serverUrl + `/students/${user._id}?admins=true`).then((res) => {
+        
+        res.data.administrator && setAdmin(true);
+      });
     });
   }, []);
   useEffect(() => {

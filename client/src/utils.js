@@ -27,8 +27,8 @@ import {
   RiBookMarkFill,
 } from "react-icons/ri";
 import { FaListUl, FaListAlt } from "react-icons/fa";
-export const serverUrl = process.env.REACT_APP_SERVER_URL;
-//export const serverUrl = "http://localhost:3003";
+//export const serverUrl = process.env.REACT_APP_SERVER_URL;
+export const serverUrl = "http://localhost:3003";
 export const sidebarMenu = [
   {
     unactiveIcon: <AiOutlineBell size={24} />,

@@ -18,7 +18,6 @@ const newQrMark = async (req, res) => {
 };
 const updateQrMark = async (req, res) => {
   try {
-    console.log(req);
     await QrMarking.updateMany(
       { _id: req.params.qrencodedId, "students.studentId": req.body.studentId },
       { $set: { "students.$.present": true } }

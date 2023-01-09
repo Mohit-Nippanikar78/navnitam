@@ -24,7 +24,13 @@ const QrcodeMarkingVerify = () => {
         });
     });
   }, []);
-  if(done) return <img src="https://gifdb.com/images/high/account-fully-verified-check-mark-r94d8zad5ichwkv3.webp" alt="" />
+  if (done)
+    return (
+      <img
+        src="https://gifdb.com/images/high/account-fully-verified-check-mark-r94d8zad5ichwkv3.webp"
+        alt=""
+      />
+    );
   return (
     <div className="flex h-1/3 items-center justify-center flex-col m-4">
       <InfinitySpin width="200" color="#4fa94d" />;

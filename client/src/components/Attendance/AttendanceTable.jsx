@@ -7,11 +7,11 @@ import { ImCross } from "react-icons/im";
 import { FaAngleRight } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
 import Spinner from "Elements/Spinner";
-const AttendanceTable = ({ studentId, setTable }) => {
+const AttendanceTable = ({ studentId, setTable , user }) => {
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    fetchUser().then((user) => {
+   
       Axios.get(serverUrl + `/subjects/${user.class}`)
         .then((res) => {
           setSubjects(res.data);
@@ -19,7 +19,7 @@ const AttendanceTable = ({ studentId, setTable }) => {
         .then(() => {
           setLoading(false);
         });
-    });
+
   }, []);
   if (loading) return <Spinner message="Getting Attendance..." />;
   return (

@@ -4,7 +4,7 @@ import { AiOutlineAppstoreAdd, AiOutlineQrcode } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import { serverUrl, userInfo } from "utils";
 
-const QrcodeMaking = () => {
+const QrcodeMarking = () => {
   let navigate = useNavigate();
 
   return (
@@ -93,4 +93,4 @@ const QrcodeMaking = () => {
   );
 };
 
-export default QrcodeMaking;
+export default QrcodeMarking;

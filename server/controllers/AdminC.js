@@ -31,10 +31,9 @@ const getAllAdminPendingStudents = async (req, res) => {
   }
 };
 const updateAdminPendingStudents = async (req, res) => {
-  console.log(req.body);
+  
   let Adminn = await Admin.findById(req.body.classId);
   let present = Adminn.students.includes(req.body.studentId);
-  console.log("fjfjfjfjfddd", present);
   if (!present) {
     try {
      await Admin.findByIdAndUpdate(
@@ -82,7 +81,6 @@ const updateAdminStudents = async (req, res) => {
     _id: req.body.classid,
     students: { $in: [req.body.studentId] },
   });
-  console.log(Already);
   if (Already.length == 0) {
     try {
       Admin.findByIdAndUpdate(

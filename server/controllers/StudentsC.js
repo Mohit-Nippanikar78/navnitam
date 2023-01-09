@@ -54,6 +54,7 @@ const updateStudent = async (req, res) => {
 const getStudent = async (req, res) => {
   try {
     const { id } = req.params;
+    let present = await Student.findOne({ _id: id });
     if (req.query?.lecAtt) {
       const user = await Student.findById(id).populate("lecAtt").exec();
       let lecAttSub = user.lecAtt.find((item) => {
@@ -87,6 +88,15 @@ const getStudent = async (req, res) => {
         rollNo,
         className: user.class.name,
       });
+    } else if (req.query?.admins) {
+      const user = await Student.findById(id);
+
+      res.send({
+        administrator: user.administrator,
+      });
+    } else if (req.query?.ClassAllot) {
+      const user = await Student.findById(id).exec();
+      res.send({ ClassAlloted: user.class ? true : false });
     } else {
       const { id } = req.params;
       const user = await Student.findById(id);

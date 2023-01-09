@@ -7,7 +7,6 @@ const addFile = async (req, res) => {
     req.body.forder = folder.files.length + 1;
 
     let filesInserted = await NotesPdf.insertMany([req.body]);
-    console.log(filesInserted[0]._id.toString());
     if (req.body.folderId !== "main") {
       NotesFolder.findByIdAndUpdate(
         req.body.folderId,

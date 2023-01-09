@@ -38,12 +38,10 @@ import QrcodeMarkingVerify from "components/Attendance/Marking/QrMark/QrcodeMark
 const Home = ({ sidebarWidth }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [admin, setAdmin] = useState(false);
   const [user, setUser] = useState();
   useEffect(() => {
     fetchUser().then((userr) => {
       setUser(userr);
-      userr.administrator && setAdmin(true);
     });
   }, []);
 
@@ -59,15 +57,14 @@ const Home = ({ sidebarWidth }) => {
         sidebarWidth={sidebarWidth}
         setSearchTerm={setSearchTerm}
         user={user}
-        admin={admin}
       />
       <div className="mt-[135px]">
         <Routes>
           <Route path="/" element={<Activity />} />
           <Route path="/assistant" element={<Assistant />} />
           <Route path="/exams" element={<Exams />} />
-          <Route path="attendance" element={<Attendance />}>
-            <Route path="subjects" element={<AttendanceTable />} />
+          <Route path="attendance" element={<Attendance user={user} />}>
+            <Route path="subjects" element={<AttendanceTable user={user} />} />
           </Route>
           <Route path="students" element={<Students />} />
 
@@ -82,7 +79,7 @@ const Home = ({ sidebarWidth }) => {
             element={<NotesPdfPreview />}
           />
 
-          {admin && (
+          {user?.administrator && (
             <>
               <Route
                 path="notes/file/:fileId/edit"
@@ -98,27 +95,24 @@ const Home = ({ sidebarWidth }) => {
               <Route path="student/:studentId" element={<Student />} />
               <Route path="student/:studentId/edit" element={<StudentEdit />} />
               <Route path="requests" element={<Requests />} />
-              <Route path="presenty" element={<Presenty admin={admin} />} />
+              <Route path="presenty" element={<Presenty />} />
 
               <Route
                 path="presenty/singly"
-                element={<SinglyMarking admin={admin} />}
+                element={<SinglyMarking user={user} />}
               />
-              <Route
-                path="presenty/doubly"
-                element={<QrcodeMarking admin={admin} />}
-              />
+              <Route path="presenty/doubly" element={<QrcodeMarking />} />
               <Route
                 path="presenty/doubly/:qrcodeId"
                 element={<QrcodeMarkingNew />}
               />
-              <Route
-                path="presenty/doubly/verify/:qrencodedId"
-                element={<QrcodeMarkingVerify />}
-              />
               <Route path="subjects" element={<Subjects />} />
             </>
           )}
+          <Route
+            path="presenty/doubly/verify/:qrencodedId"
+            element={<QrcodeMarkingVerify />}
+          />
           <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
       </div>
