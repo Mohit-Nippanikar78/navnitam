@@ -27,7 +27,7 @@ const Subjects = () => {
   useEffect(() => {
     editSubject.order && setNewSubject(true);
   }, [editSubject]);
-
+//if(!admin){navigate();return;}
   if (loading) {
     return <Spinner message="Getting Subjects" />;
   }

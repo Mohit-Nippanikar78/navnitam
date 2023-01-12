@@ -10,7 +10,7 @@ import TimeRange from "react-time-range";
 import { userInfo, serverUrl } from "utils";
 import Spinner from "Elements/Spinner";
 import { Link, useNavigate } from "react-router-dom";
-const SinglyMarking = ({ user }) => {
+const SinglyMarking = ({ user,admin }) => {
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
   const [startDate, setStartDate] = useState();
@@ -57,7 +57,7 @@ const SinglyMarking = ({ user }) => {
       }, 2000);
     }
   }, [done]);
-
+   if(!admin){navigate("/");return;}
   if (loading) return <Spinner message="Loading..." />;
   if (done) return <Spinner message="Saving" />;
   return (

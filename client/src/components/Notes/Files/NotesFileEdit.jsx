@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { serverUrl } from "utils";
 
-const NotesFileEdit = () => {
+const NotesFileEdit = ({ admin }) => {
   let { fileId } = useParams();
   const [info, setInfo] = useState({});
   let navigate = useNavigate();
@@ -19,7 +19,10 @@ const NotesFileEdit = () => {
         setLoading(false);
       });
   }, []);
-  if (loading) return <Spinner message="Getting File Info" />;
+  if (!admin) {
+    navigate("/");
+    return;
+  } else if (loading) return <Spinner message="Getting File Info" />;
 
   return (
     <div class="mx-auto   mx-2 border bg-white p-4">
@@ -51,7 +54,7 @@ const NotesFileEdit = () => {
             });
           }}
         >
-          Update 
+          Update
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import AttendanceTable from "../Attendance/AttendanceTable";
 import AttendanceSubject from "../Attendance/AttendanceSubject";
 
-const Student = () => {
+const Student = ({admin}) => {
   let { studentId } = useParams();
   const [value, setValue] = React.useState("1");
 
@@ -37,6 +37,7 @@ const Student = () => {
         setLoading(false);
       });
   }, []);
+  if(!admin){navigate("/");return ;}
   if (loading) return <Spinner message="Getting Student Info..." />;
 
   return (

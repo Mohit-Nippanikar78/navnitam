@@ -5,8 +5,9 @@ import { serverUrl, userInfo } from "utils";
 import QrcodeMarking from "./QrMark/QrcodeMarking";
 import SinglyMarking from "./SinglyMarking";
 
-const Presenty = () => {
+const Presenty = ({admin}) => {
   let navigate = useNavigate();
+  if(!admin){navigate("/");return;}
   return (
     <div className="flex ">
       <div class="max-w-sm mx-4 bg-white rounded-lg border border-gray-200 shadow-md :bg-gray-800 :border-gray-700">

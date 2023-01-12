@@ -3,12 +3,13 @@ import { fetchUser, serverUrl, userInfo, testNames } from "utils";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const CreateExam = () => {
+const CreateExam = ({admin}) => {
   const [subjects, setSubjects] = useState([]);
   const [testName, setTestName] = useState("");
   const [totalM, setTotalM] = useState(70);
   let navigate = useNavigate();
   useEffect(() => {
+    
     userInfo().then((user) => {
       Axios.get(serverUrl + `/subjects/${user.class}`).then((res) =>
         res.data.map((item) => {
@@ -20,6 +21,7 @@ const CreateExam = () => {
       );
     });
   }, []);
+if(!admin){navigate("/");return;}
   const ChooseSubject = (e) => {
     const { name, checked } = e.target;
     if (name == "allSelect") {

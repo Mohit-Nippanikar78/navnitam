@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchUser, serverUrl } from "utils";
 
-const NotesNewFolder = () => {
+const NotesNewFolder = ({admin}) => {
   let navigate = useNavigate();
   const [fname, setFname] = useState("");
   const [fdesc, setFdesc] = useState("");
@@ -26,8 +26,8 @@ const NotesNewFolder = () => {
         setLoading(false);
       });
   }, []);
-
-  if (loading) <Spinner message="Creating New Folder" />;
+if(!admin){navigate("/");return;}
+ else if (loading) <Spinner message="Creating New Folder" />;
   return (
     <div class="mx-auto   mx-2 border bg-white p-4">
       <div class="flex items-center justify-between">

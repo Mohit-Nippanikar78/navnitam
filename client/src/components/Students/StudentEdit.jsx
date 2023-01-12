@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { serverUrl } from "utils";
 
-const StudentEdit = () => {
+const StudentEdit = ({admin}) => {
   let { studentId } = useParams();
   const [info, setInfo] = useState({});
   let navigate = useNavigate();
@@ -12,7 +12,7 @@ const StudentEdit = () => {
       setInfo(res.data);
     });
   }, []);
-
+if(!admin){navigate("/");return;}
   return (
     <div class="mx-auto   mx-2 border bg-white p-4">
       <div class="flex items-center justify-between">

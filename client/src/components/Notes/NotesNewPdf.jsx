@@ -3,10 +3,10 @@ import axios from "axios";
 import fileSize from "file-size";
 import React, { useEffect, useState } from "react";
 import { MdPictureAsPdf } from "react-icons/md";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { fetchUser, serverUrl } from "utils";
 
-const NotesNewPdf = () => {
+const NotesNewPdf = ({ admin }) => {
   let ng = useNavigate();
   const location = useLocation();
 
@@ -17,6 +17,7 @@ const NotesNewPdf = () => {
   const [status, setStatus] = useState([]);
   const [folders, setFolders] = useState([]);
   const [folderId, setFolderId] = useState("main");
+  const navigate = useNavigate();
   useEffect(() => {
     setFolderId(location.state.folderId);
     console.log(location.state.folderId);
@@ -29,23 +30,23 @@ const NotesNewPdf = () => {
     });
   }, []);
   useEffect(() => {
-    console.log(pdf)
-  
-   
-  }, [pdf])
-  
+    console.log(pdf);
+  }, [pdf]);
+
   useEffect(() => {
     var statusss = 0;
     status.map((item) => [item && statusss++]);
-    console.log(statusss,pdf.length);
+    console.log(statusss, pdf.length);
     if (saved && statusss == pdf.length) {
       ng("/notes");
     }
   }, [status]);
-
+  if (!admin) {
+    navigate("/");
+    return;
+  }
   return (
     <div>
-      
       <div className="mx-auto fon    mx-2 border bg-white p-4">
         <div className="flex items-center justify-between">
           <span className="text-[#64748B]">Fill details of File</span>
@@ -96,37 +97,39 @@ const NotesNewPdf = () => {
             PDF or IMG
           </p>
         </div>
-        {pdf.length !== 0 && <div className="overflow-x-auto p-2 relative shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left text-gray-500 ">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
-              <tr>
-                <th scope="col" className="py-3 pl-6">
-                  Type
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  File Name
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  {saved ? "Status" : ""}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {[...pdf].map((item, i) => {
-                return (
-                  <NotesUploadFile
-                    item={item}
-                    key={i}
-                    saved={saved}
-                    classId={classId}
-                    setStatus={setStatus}
-                    folderId={folderId}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
-        </div>}
+        {pdf.length !== 0 && (
+          <div className="overflow-x-auto p-2 relative shadow-md sm:rounded-lg">
+            <table className="w-full text-sm text-left text-gray-500 ">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+                <tr>
+                  <th scope="col" className="py-3 pl-6">
+                    Type
+                  </th>
+                  <th scope="col" className="py-3 px-6">
+                    File Name
+                  </th>
+                  <th scope="col" className="py-3 px-6">
+                    {saved ? "Status" : ""}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...pdf].map((item, i) => {
+                  return (
+                    <NotesUploadFile
+                      item={item}
+                      key={i}
+                      saved={saved}
+                      classId={classId}
+                      setStatus={setStatus}
+                      folderId={folderId}
+                    />
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         <div className="mt-6">
           <div

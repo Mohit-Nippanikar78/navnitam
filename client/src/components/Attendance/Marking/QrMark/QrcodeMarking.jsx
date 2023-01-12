@@ -1,12 +1,13 @@
 import axios from "axios";
+import moment from "moment";
 import React from "react";
 import { AiOutlineAppstoreAdd, AiOutlineQrcode } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import { serverUrl, userInfo } from "utils";
 
-const QrcodeMarking = () => {
+const QrcodeMarking = ({admin}) => {
   let navigate = useNavigate();
-
+if(!admin){navigate("/");return;}
   return (
     <>
       <div className=" flex justify-between items-center mx-2  ">
@@ -18,9 +19,10 @@ const QrcodeMarking = () => {
           onClick={() => {
             userInfo().then((user) => {
               axios
-                .post(serverUrl + "/qrmark/new", { classId: user.class })
+                .post(serverUrl + "/qrmark/new", {
+                  classId: user.class,
+                })
                 .then((res) => {
-                  console.log(res.data);
                   navigate(`${res.data}`);
                 });
             });
@@ -89,6 +91,7 @@ const QrcodeMarking = () => {
           </li>
         </ul>
       </div>
+      
     </>
   );
 };

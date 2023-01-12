@@ -67,7 +67,6 @@ const Home = ({ sidebarWidth }) => {
             <Route path="subjects" element={<AttendanceTable user={user} />} />
           </Route>
           <Route path="students" element={<Students />} />
-
           <Route
             path="attendance/subject"
             element={<AttendanceSubject studentId={user?._id} />}
@@ -78,37 +77,61 @@ const Home = ({ sidebarWidth }) => {
             path="notes/pdf/preview/:fileId"
             element={<NotesPdfPreview />}
           />
+          <Route path="subjects" element={<Subjects />} />
+          //Only Administrator
+          <>
+            <Route
+              path="notes/file/:fileId/edit"
+              element={<NotesFileEdit admin={user?.administrator} />}
+            />
+            <Route
+              path="notes/file/new"
+              element={<NotesNewPdf admin={user?.administrator} />}
+            />
+            <Route
+              path="notes/folder/edit/:folderId"
+              element={<EditFolder admin={user?.administrator} />}
+            />
+            <Route
+              path="notes/folder/new"
+              element={<NotesNewFolder admin={user?.administrator} />}
+            />
+            <Route
+              path="exams/create"
+              element={<CreateExam admin={user?.administrator} />}
+            />
+            <Route
+              path="student/:studentId"
+              element={<Student admin={user?.administrator} />}
+            />
+            <Route
+              path="student/:studentId/edit"
+              element={<StudentEdit admin={user?.administrator} />}
+            />
+            <Route
+              path="requests"
+              element={<Requests admin={user?.administrator} />}
+            />
+            <Route
+              path="presenty"
+              element={<Presenty admin={user?.administrator} />}
+            />
 
-          {user?.administrator && (
-            <>
-              <Route
-                path="notes/file/:fileId/edit"
-                element={<NotesFileEdit />}
-              />
-              <Route path="notes/file/new" element={<NotesNewPdf />} />
-              <Route
-                path="notes/folder/edit/:folderId"
-                element={<EditFolder />}
-              />
-              <Route path="notes/folder/new" element={<NotesNewFolder />} />
-              <Route path="exams/create" element={<CreateExam />} />
-              <Route path="student/:studentId" element={<Student />} />
-              <Route path="student/:studentId/edit" element={<StudentEdit />} />
-              <Route path="requests" element={<Requests />} />
-              <Route path="presenty" element={<Presenty />} />
-
-              <Route
-                path="presenty/singly"
-                element={<SinglyMarking user={user} />}
-              />
-              <Route path="presenty/doubly" element={<QrcodeMarking />} />
-              <Route
-                path="presenty/doubly/:qrcodeId"
-                element={<QrcodeMarkingNew />}
-              />
-              <Route path="subjects" element={<Subjects />} />
-            </>
-          )}
+            <Route
+              path="presenty/singly"
+              element={
+                <SinglyMarking user={user} admin={user?.administrator} />
+              }
+            />
+            <Route
+              path="presenty/doubly"
+              element={<QrcodeMarking admin={user?.administrator} />}
+            />
+            <Route
+              path="presenty/doubly/:qrcodeId"
+              element={<QrcodeMarkingNew admin={user?.administrator} />}
+            />
+          </>
           <Route
             path="presenty/doubly/verify/:qrencodedId"
             element={<QrcodeMarkingVerify />}

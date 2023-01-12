@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { fetchUser, serverUrl } from "../utils";
 import Axios from "axios";
 import Spinner from "../Elements/Spinner";
-const Requests = () => {
+import {  useNavigate } from "react-router-dom";
+const Requests = ({admin}) => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  let navigate = useNavigate();
   useEffect(() => {
     const getpending = async () => {
       let obj = await fetchUser();
@@ -18,6 +20,7 @@ const Requests = () => {
     };
     getpending();
   }, []);
+  if(!admin){navigate("/");return;}
   if (loading) return <Spinner message="Getting Requests" />;
   if (requests.length == 0) {
     return (

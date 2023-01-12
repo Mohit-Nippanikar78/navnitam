@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 const QrMarkingSchema = new mongoose.Schema({
-  sessionName: String,
+  sessionName: {
+    type: String,
+    default: moment(new Date()).format("lll"),
+  },
   students: [
     {
       studentId: {

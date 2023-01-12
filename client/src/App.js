@@ -13,7 +13,7 @@ function App() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    console.log(window.location);
+   
     userInfo().then((obj) => {
       if (obj == null || obj == "" || Object.keys(obj).length === 0) {
         navigate("/login", { replace: true });
