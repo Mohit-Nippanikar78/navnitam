@@ -1,5 +1,6 @@
 const QrMarking = require("../models/QrMarking");
 const Admin = require("../models/Admin");
+const moment = require("moment");
 
 const newQrMark = async (req, res) => {
   try {
@@ -9,13 +10,12 @@ const newQrMark = async (req, res) => {
       return { studentId: item._id, present: false };
     });
     qrmark.classId = req.body.classId;
-    qrmark.sessionName = req.body?.sessionName;
-
+    qrmark.sessionName = moment().format("lll");
     await qrmark.save();
 
     res.send(qrmark._id);
   } catch (error) {
-    console.log(error);
+    res.send(error);
   }
 };
 const getQrMark = async (req, res) => {
@@ -28,6 +28,18 @@ const getQrMark = async (req, res) => {
     let sessionn = await QrMarking.findById(req.params.qrcodeId)
       .populate({ path: "students", populate: { path: "studentId" } })
       .exec();
+
+    if (req.query?.update) {
+      const tempStudents = sessionn.students.map((ele) => {
+        let { studentId, present } = ele;
+        return {
+          studentId: studentId._id,
+
+          present,
+        };
+      });
+      res.send({ students: tempStudents });
+    }
     const tempStudents = sessionn.students.map((ele) => {
       let { studentId, _id, present } = ele;
       return {
@@ -42,14 +54,51 @@ const getQrMark = async (req, res) => {
     });
 
     let { _id, sessionName, createdAt } = sessionn;
+    let submitTime = new Date().getTime();
+    let limitTime = new Date(createdAt).getTime() + 120000;
     res.send({
       sessionId: _id,
       sessionName,
       createdAt,
       students: tempStudents,
+      activeQr: submitTime < limitTime,
     });
   } catch (error) {
     console.log(error);
+  }
+};
+const getClassMark = async (req, res) => {
+  try {
+    let page = Number(req.query.page);
+    let { classId } = req.params;
+
+    let classQrs = await QrMarking.find({ classId })
+      .sort({ createdAt: -1 })
+      .skip(page * 10)
+      .limit(10)
+      .exec();
+    let classNextQrs = await QrMarking.find({ classId })
+      .sort({ createdAt: -1 })
+      .skip((page + 1) * 10)
+
+      .exec();
+    let next = classNextQrs.length != 0 ? true : false;
+    let upclassQrs = classQrs.map((item) => {
+      let { _id, sessionName, createdAt } = item;
+      let submitTime = new Date().getTime();
+      let limitTime = new Date(createdAt).getTime() + 120000;
+
+      return {
+        qrcodeId: _id.toString(),
+        sessionName,
+        createdAt,
+        activeQr: submitTime < limitTime,
+      };
+    });
+
+    res.send({ qrs: upclassQrs, next });
+  } catch (error) {
+    res.send(error);
   }
 };
 const updateQrMark = async (req, res) => {
@@ -73,10 +122,20 @@ const updateQrMark = async (req, res) => {
     } else if (req.query?.verify) {
       let session = await QrMarking.findById(req.params.qrencodedId);
 
+      let submitTime = new Date(req.body?.currentTiming).getTime();
+      let limitTime = new Date(session.createdAt).getTime();
+      // console.log(
+      //   submitTime,
+      //   limitTime,
+      //   limitTime + 120000,
+      //   submitTime < limitTime
+      // );
+      // console.log(req.body, session);
       if (
         new Date(req.body?.currentTiming).getTime() <
-        moment(session.createdAt.getTime()).add(2, "minutes").milliseconds()
+        new Date(session.createdAt).getTime() + 120000
       ) {
+        // moment(session.createdAt.getTime()).add(2, "minutes").milliseconds()
         await QrMarking.updateMany(
           {
             _id: req.params.qrencodedId,
@@ -95,4 +154,4 @@ const updateQrMark = async (req, res) => {
     console.log(error);
   }
 };
-module.exports = { newQrMark, updateQrMark, getQrMark };
+module.exports = { newQrMark, updateQrMark, getQrMark, getClassMark };

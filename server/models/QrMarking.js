@@ -3,7 +3,7 @@ const moment = require("moment");
 const QrMarkingSchema = new mongoose.Schema({
   sessionName: {
     type: String,
-    default: moment(new Date()).format("lll"),
+    
   },
   students: [
     {
@@ -23,7 +23,7 @@ const QrMarkingSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: new Date(),
+    default: Date.now,
   },
 });
 const QrMarking = mongoose.model("QrMarking", QrMarkingSchema);

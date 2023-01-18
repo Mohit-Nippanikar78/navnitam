@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaIdCardAlt, FaPencilAlt } from "react-icons/fa";
 import { RiTeamFill, RiVipCrown2Fill } from "react-icons/ri";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -14,8 +14,9 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import AttendanceTable from "../Attendance/AttendanceTable";
 import AttendanceSubject from "../Attendance/AttendanceSubject";
+import { adminContext } from "container/Home";
 
-const Student = ({admin}) => {
+const Student = ({ admin }) => {
   let { studentId } = useParams();
   const [value, setValue] = React.useState("1");
 
@@ -26,6 +27,7 @@ const Student = ({admin}) => {
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState("");
   const [table, setTable] = useState();
+  const { owner, setOwner } = useContext(adminContext);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -36,8 +38,12 @@ const Student = ({admin}) => {
       .then(() => {
         setLoading(false);
       });
+    console.log(owner);
   }, []);
-  if(!admin){navigate("/");return ;}
+  if (!admin) {
+    navigate("/");
+    return;
+  }
   if (loading) return <Spinner message="Getting Student Info..." />;
 
   return (
@@ -62,7 +68,13 @@ const Student = ({admin}) => {
                     Student
                   </p>
                 </div>
-                <FaPencilAlt size={24} className="flex-end absolute right-8 cursor-pointer"  onClick={()=>{navigate("edit")}}/>
+                <FaPencilAlt
+                  size={24}
+                  className="flex-end absolute right-8 cursor-pointer"
+                  onClick={() => {
+                    navigate("edit");
+                  }}
+                />
               </div>
             </div>
             <div class="my-5 px-6">

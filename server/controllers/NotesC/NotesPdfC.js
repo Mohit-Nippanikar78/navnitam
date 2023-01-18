@@ -3,35 +3,32 @@ const NotesFolder = require("../../models/Notes/NotesFolder");
 const Cloudinary = require("../../utils");
 const addFile = async (req, res) => {
   try {
-    let folder = await NotesFolder.findById(req.body.folderId);
-    req.body.forder = folder.files.length + 1;
+    if (req.body.folderId == "main") {
+      let folders = await NotesPdf.find({ folderId: "main" });
+      req.body.forder = folders.length + 1;
+      await NotesPdf.insertMany([req.body]);
+      res.send("success");
+    } else {
+      let folder = await NotesFolder.findById(req.body.folderId);
+      req.body.forder = folder.files.length + 1;
 
-    let filesInserted = await NotesPdf.insertMany([req.body]);
-    if (req.body.folderId !== "main") {
-      NotesFolder.findByIdAndUpdate(
-        req.body.folderId,
-        {
-          $push: { files: filesInserted[0]._id.toString() },
-        },
-        function (error, success) {
-          if (error) {
-            console.log("error in add file");
-          } else {
-            console.log("success");
-          }
-        }
-      );
+      let filesInserted = await NotesPdf.insertMany([req.body]);
+      folder.files = folder.files.concat(filesInserted[0]._id.toString());
+      await folder.save();
+      res.send("success");
     }
-    res.send("fhfhfh");
   } catch (error) {
     console.log(error);
+    res.send({ error });
   }
 };
 const getFile = async (req, res) => {
   try {
     let { classId } = req.params;
     if (req.query?.main) {
-      let pdfs = await NotesPdf.find({ classId, folderId: "main" }).sort("forder").exec();
+      let pdfs = await NotesPdf.find({ classId, folderId: "main" })
+        .sort("forder")
+        .exec();
 
       res.send(pdfs);
     }

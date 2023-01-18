@@ -168,18 +168,23 @@ const NotesUploadFile = ({ item, saved, classId, setStatus, folderId }) => {
           },
         })
         .then((res) => {
-          console.log(res);
+         
           axios
-            .post(serverUrl + `/notesPdf/new`, {
-              fname: pname,
-              fsize: psize,
-              ftype: item.type.split("/")[1],
-              fileUrl: res.data.secure_url,
-              classId,
-              folderId,
-              public_id: res.data.public_id,
-            })
-            .then(() => {
+            .post(
+              serverUrl + `/notesPdf/new`,
+              {
+                fname: pname,
+                fsize: psize,
+                ftype: item.type.split("/")[1],
+                fileUrl: res.data.secure_url,
+                classId,
+                folderId,
+                public_id: res.data.public_id,
+              },
+              { headers: { "Access-Control-Allow-Origin": "*" } }
+            )
+            .then((res) => {
+              if(res.data == "success")
               setStatus((array) => [...array, true]);
             });
         });

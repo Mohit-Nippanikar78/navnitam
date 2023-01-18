@@ -14,12 +14,13 @@ const QrcodeMarkingVerify = () => {
     userInfo().then((user) => {
       var bytes = base64.decode(qrencodedId);
       var decodedByter = utf8.decode(bytes);
-      console.log(decodedByter);
+      console.log(new Date());
 
       axios
         .put(serverUrl + `/qrmark/update/${decodedByter}?verify=true`, {
           studentId: user._id,
           currentTiming: new Date(),
+          present: true,
         })
         .then((res) => {
           console.log(res);
@@ -34,7 +35,7 @@ const QrcodeMarkingVerify = () => {
   if (reject)
     return (
       <div
-       // id="alert-additional-content-2"
+        // id="alert-additional-content-2"
         class="mx-2 p-4 mb-4 text-red-900 border border-red-300 rounded-lg bg-red-50 :bg-gray-800 :text-red-400 :border-red-900"
         //role="alert"
       >
@@ -56,7 +57,8 @@ const QrcodeMarkingVerify = () => {
           <h3 class="text-lg font-bold">Qrcode Timed Out !</h3>
         </div>
         <div class="mt-2 mb-4 text-sm">
-         Make sure you note that Qrcode will only be online for 2 minutes . Scan before we discard it 
+          Make sure you note that Qrcode will only be online for 2 minutes .
+          Scan before we discard it
         </div>
         <div class="flex">
           <button

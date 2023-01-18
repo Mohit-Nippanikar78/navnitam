@@ -26,7 +26,7 @@ const getFolder = async (req, res) => {
   try {
     let { folderId } = req.params;
     let subs = await NotesFolder.findById(folderId);
-    let { fname, fdesc, _id } = subs;
+    let { fname, fdesc, _id } = subs
     res.send({ fname, _id, fdesc });
   } catch (error) {
     console.log(error);

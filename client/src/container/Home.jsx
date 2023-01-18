@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import {
   Navbar,
   Activity,
@@ -35,6 +35,7 @@ import NotesPdfPreview from "components/Notes/Files/NotesPdfPreview";
 import EditFolder from "components/Notes/Folder/EditFolder";
 import QrcodeMarkingNew from "components/Attendance/Marking/QrMark/QrcodeMarkingNew";
 import QrcodeMarkingVerify from "components/Attendance/Marking/QrMark/QrcodeMarkingVerify";
+
 const Home = ({ sidebarWidth }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -44,6 +45,7 @@ const Home = ({ sidebarWidth }) => {
       setUser(userr);
     });
   }, []);
+
 
   return (
     <div
@@ -59,27 +61,30 @@ const Home = ({ sidebarWidth }) => {
         user={user}
       />
       <div className="mt-[135px]">
-        <Routes>
-          <Route path="/" element={<Activity />} />
-          <Route path="/assistant" element={<Assistant />} />
-          <Route path="/exams" element={<Exams />} />
-          <Route path="attendance" element={<Attendance user={user} />}>
-            <Route path="subjects" element={<AttendanceTable user={user} />} />
-          </Route>
-          <Route path="students" element={<Students />} />
-          <Route
-            path="attendance/subject"
-            element={<AttendanceSubject studentId={user?._id} />}
-          />
-          <Route path="notes" element={<Notes />} />
-          <Route path="notes/folder/:folderId" element={<NotesFolder />} />
-          <Route
-            path="notes/pdf/preview/:fileId"
-            element={<NotesPdfPreview />}
-          />
-          <Route path="subjects" element={<Subjects />} />
-          //Only Administrator
-          <>
+        <adminContext.Provider value={{owner,setOwner}}>
+          <Routes>
+            <Route path="/" element={<Activity />} />
+            <Route path="/assistant" element={<Assistant />} />
+            <Route path="/exams" element={<Exams />} />
+            <Route path="attendance" element={<Attendance user={user} />}>
+              <Route
+                path="subjects"
+                element={<AttendanceTable user={user} />}
+              />
+            </Route>
+            <Route path="students" element={<Students />} />
+            <Route
+              path="attendance/subject"
+              element={<AttendanceSubject studentId={user?._id} />}
+            />
+            <Route path="notes" element={<Notes />} />
+            <Route path="notes/folder/:folderId" element={<NotesFolder />} />
+            <Route
+              path="notes/pdf/preview/:fileId"
+              element={<NotesPdfPreview />}
+            />
+            <Route path="subjects" element={<Subjects />} />
+            //Only Administrator
             <Route
               path="notes/file/:fileId/edit"
               element={<NotesFileEdit admin={user?.administrator} />}
@@ -116,7 +121,6 @@ const Home = ({ sidebarWidth }) => {
               path="presenty"
               element={<Presenty admin={user?.administrator} />}
             />
-
             <Route
               path="presenty/singly"
               element={
@@ -131,13 +135,13 @@ const Home = ({ sidebarWidth }) => {
               path="presenty/doubly/:qrcodeId"
               element={<QrcodeMarkingNew admin={user?.administrator} />}
             />
-          </>
-          <Route
-            path="presenty/doubly/verify/:qrencodedId"
-            element={<QrcodeMarkingVerify />}
-          />
-          <Route path="/*" element={<Navigate to="/" />} />
-        </Routes>
+            <Route
+              path="presenty/doubly/verify/:qrencodedId"
+              element={<QrcodeMarkingVerify />}
+            />
+            <Route path="/*" element={<Navigate to="/" />} />
+          </Routes>
+        </adminContext.Provider>
       </div>
       <Outlet />
     </div>
